@@ -12,6 +12,10 @@ public class Note extends AggregateRoot implements IOriginator {
 
     private String title;
 
+    public Note() {
+
+    }
+
     public Note(String id, String title) {
         super(id);
         applyChange(new NoteCreated(title));
@@ -38,12 +42,12 @@ public class Note extends AggregateRoot implements IOriginator {
         this.title = ss.getTitle();
     }
 
-    private void handle(NoteCreated e) {
-        this.title = title;
+    public void handle(NoteCreated e) {
+        this.title = e.getTitle();
     }
 
-    private void handle(NoteTitleChanged e) {
-        this.title = title;
+    public void handle(NoteTitleChanged e) {
+        this.title = e.getTitle();
     }
 
 }

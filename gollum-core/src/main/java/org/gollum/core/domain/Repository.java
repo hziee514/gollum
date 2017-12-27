@@ -2,6 +2,7 @@ package org.gollum.core.domain;
 
 import org.gollum.core.eventing.AggregateSnapshot;
 import org.gollum.core.eventing.DomainEvent;
+import org.gollum.core.eventing.IEventPublisher;
 import org.gollum.core.eventing.IEventStorage;
 
 import java.util.List;
@@ -13,12 +14,14 @@ import java.util.List;
  * @author wurenhai
  * @date 2017/12/26
  */
-public abstract class Repository<T extends AggregateRoot> {
+public class Repository<T extends AggregateRoot> {
 
     private final IEventStorage storage;
+    private final IEventPublisher publisher;
 
-    public Repository(IEventStorage storage) {
+    public Repository(IEventStorage storage, IEventPublisher publisher) {
         this.storage = storage;
+        this.publisher = publisher;
     }
 
     public T getById(String aggregateRootId, Class<? extends AggregateRoot> type) {
@@ -49,14 +52,16 @@ public abstract class Repository<T extends AggregateRoot> {
             return;
         }
         //TODO: 同步锁
-        if (expectedVersion == -1) {
+        if (expectedVersion != -1) {
             AggregateRoot item = getById(aggregateRoot.getId(), aggregateRoot.getClass());
             if (item.getVersion() != expectedVersion) {
                 throw new IllegalStateException();
             }
         }
         storage.save(aggregateRoot);
-        aggregateRoot.acceptChanges();
+        //TODO: 完成改变并发布领域事件
+        List<DomainEvent> events = aggregateRoot.acceptChanges();
+        events.stream().forEach(e -> publisher.publish(e));
     }
 
 }

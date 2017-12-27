@@ -3,6 +3,8 @@ package org.gollum.note.commandhandler;
 import org.gollum.core.commanding.Command;
 import org.gollum.core.commanding.ICommandHandler;
 import org.gollum.core.commanding.ICommandHandlerFactory;
+import org.gollum.note.command.ChangeNoteTitleCommand;
+import org.springframework.context.ApplicationContext;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -15,9 +17,9 @@ public class NoteCommandHandlerFactory implements ICommandHandlerFactory {
 
     private final List<ICommandHandler> handlers = new LinkedList<>();
 
-    public NoteCommandHandlerFactory() {
-        handlers.add(new CreateNoteCommandHandler());
-        handlers.add(new ChangeNoteTitleCommandHandler());
+    public NoteCommandHandlerFactory(ApplicationContext context) {
+        handlers.add(context.getBean(CreateNoteCommandHandler.class));
+        handlers.add(context.getBean(ChangeNoteTitleCommandHandler.class));
     }
 
     @Override

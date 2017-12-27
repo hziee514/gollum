@@ -2,16 +2,29 @@ package org.gollum.note.commandhandler;
 
 import org.gollum.core.commanding.ICommandHandler;
 import org.gollum.note.command.ChangeNoteTitleCommand;
+import org.gollum.note.domain.Note;
+import org.gollum.note.domain.NoteRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 
 /**
  * @author wurenhai
  * @date 2017/12/26
  */
+@Component
+@Scope("singleton")
 public class ChangeNoteTitleCommandHandler implements ICommandHandler<ChangeNoteTitleCommand> {
+
+    @Autowired
+    private NoteRepository repository;
 
     @Override
     public void exec(ChangeNoteTitleCommand command) {
-        System.out.println(command.getTitle());
+        Note note = repository.getById(command.getAggregateRootId(), Note.class);
+        int version = note.getVersion();
+        note.changeTitle(command.getTitle());
+        repository.save(note, version);
     }
 
 }

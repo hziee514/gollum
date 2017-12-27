@@ -23,6 +23,10 @@ public class Application {
 
         bus.send(new ChangeNoteTitleCommand(aggregateRootId, "world"));
 
+        bus.send(new ChangeNoteTitleCommand(aggregateRootId, "change2"));
+
+        bus.send(new ChangeNoteTitleCommand(aggregateRootId, "change3"));
+
         System.out.println("");
     }
 

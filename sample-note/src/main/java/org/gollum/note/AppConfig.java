@@ -3,7 +3,10 @@ package org.gollum.note;
 import org.gollum.core.commanding.ICommandBus;
 import org.gollum.core.commanding.ICommandHandlerFactory;
 import org.gollum.core.commanding.InMemoryCommandBus;
+import org.gollum.core.eventing.*;
 import org.gollum.note.commandhandler.NoteCommandHandlerFactory;
+import org.gollum.note.eventhandler.NoteEventHandlerFactory;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -25,8 +28,26 @@ public class AppConfig {
 
     @Bean
     @Scope("singleton")
-    ICommandHandlerFactory commandExecutorFactory() {
-        return new NoteCommandHandlerFactory();
+    ICommandHandlerFactory commandExecutorFactory(ApplicationContext context) {
+        return new NoteCommandHandlerFactory(context);
+    }
+
+    @Bean
+    @Scope("singleton")
+    IEventStorage eventStorage() {
+        return new InMemoryEventStorage();
+    }
+
+    @Bean
+    @Scope("singleton")
+    IEventPublisher eventPublisher(IEventHandlerFactory factory) {
+        return new InMemoryEventPublisher(factory);
+    }
+
+    @Bean
+    @Scope("singleton")
+    IEventHandlerFactory eventHandlerFactory() {
+        return new NoteEventHandlerFactory();
     }
 
 }

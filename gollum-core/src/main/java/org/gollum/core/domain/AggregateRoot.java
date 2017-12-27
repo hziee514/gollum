@@ -59,7 +59,7 @@ public abstract class AggregateRoot implements IEventProvider {
         return version;
     }
 
-    public <T> T as() {
+    public <T> T as(Class<T> type) {
         return (T)this;
     }
 
@@ -67,16 +67,20 @@ public abstract class AggregateRoot implements IEventProvider {
         for (DomainEvent e : history) {
             applyChange(e, false);
         }
-        this.version = history.get(history.size() - 1).getVersion();
+        if (!history.isEmpty()) {
+            this.version = history.get(history.size() - 1).getVersion();
+        }
     }
 
     public List<DomainEvent> getUncommittedChanges() {
         return changes;
     }
 
-    public void acceptChanges() {
-        this.version = changes.get(changes.size() - 1).getVersion();
+    public List<DomainEvent> acceptChanges() {
+        List<DomainEvent> events = new LinkedList<>();
+        events.addAll(changes);
         changes.clear();
+        return events;
     }
 
     protected void applyChange(DomainEvent event) {
@@ -99,8 +103,9 @@ public abstract class AggregateRoot implements IEventProvider {
         }
 
         if (isNew) {
+            this.version++;
             event.setAggregateRootId(this.id);
-            event.setVersion(this.version + 1);
+            event.setVersion(this.version);
             changes.add(event);
         }
     }

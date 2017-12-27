@@ -14,4 +14,7 @@ public class NoteCreated extends DomainEvent {
         this.title = title;
     }
 
+    public String getTitle() {
+        return title;
+    }
 }
