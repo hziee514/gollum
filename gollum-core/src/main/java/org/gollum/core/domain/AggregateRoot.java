@@ -63,6 +63,7 @@ public abstract class AggregateRoot implements IEventProvider {
         return (T)this;
     }
 
+    @Override
     public void replayEvents(List<DomainEvent> history) {
         for (DomainEvent e : history) {
             applyChange(e, false);
@@ -72,15 +73,18 @@ public abstract class AggregateRoot implements IEventProvider {
         }
     }
 
+    @Override
     public List<DomainEvent> getUncommittedChanges() {
-        return changes;
-    }
-
-    public List<DomainEvent> acceptChanges() {
         List<DomainEvent> events = new LinkedList<>();
         events.addAll(changes);
-        changes.clear();
         return events;
+    }
+
+    /**
+     * 清空变更记录
+     */
+    public void acceptChanges() {
+        changes.clear();
     }
 
     protected void applyChange(DomainEvent event) {

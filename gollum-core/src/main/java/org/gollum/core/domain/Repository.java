@@ -8,7 +8,7 @@ import org.gollum.core.eventing.IEventStorage;
 import java.util.List;
 
 /**
- * 聚合根仓储抽象类
+ * 聚合根仓储抽象类, 只能从仓储中读取数据
  * 每个聚合根对应一个Repository
  *
  * @author wurenhai
@@ -24,6 +24,13 @@ public class Repository<T extends AggregateRoot> {
         this.publisher = publisher;
     }
 
+    /**
+     * 根据ID与类型获取聚合根实例
+     *
+     * @param aggregateRootId
+     * @param type
+     * @return
+     */
     public T getById(String aggregateRootId, Class<? extends AggregateRoot> type) {
         List<DomainEvent> events;
         AggregateSnapshot snapshot = storage.getSnapshot(aggregateRootId);
@@ -38,7 +45,9 @@ public class Repository<T extends AggregateRoot> {
             if (snapshot != null) {
                 ((IOriginator)instance).restoreFromSnapshot(snapshot);
             }
-            instance.replayEvents(events);
+            if (!events.isEmpty()) {
+                instance.replayEvents(events);
+            }
             return instance;
         } catch (IllegalAccessException e) {
             throw new RuntimeException(e);
@@ -47,21 +56,32 @@ public class Repository<T extends AggregateRoot> {
         }
     }
 
-    public void save(AggregateRoot aggregateRoot, int expectedVersion) {
-        if (aggregateRoot.getUncommittedChanges().isEmpty()) {
+    /**
+     * 提交聚合根的变更
+     *
+     * @param aggregateRoot
+     * @param expectedVersion 期望修订的版本号, -1表示是新建
+     */
+    public void commit(AggregateRoot aggregateRoot, int expectedVersion) {
+        List<DomainEvent> changes = aggregateRoot.getUncommittedChanges();
+        if (changes.isEmpty()) {
             return;
         }
-        //TODO: 同步锁
+        //TODO: 同步加锁
         if (expectedVersion != -1) {
             AggregateRoot item = getById(aggregateRoot.getId(), aggregateRoot.getClass());
             if (item.getVersion() != expectedVersion) {
                 throw new IllegalStateException();
             }
         }
-        storage.save(aggregateRoot);
-        //TODO: 完成改变并发布领域事件
-        List<DomainEvent> events = aggregateRoot.acceptChanges();
-        events.stream().forEach(e -> publisher.publish(e));
+
+        //存储领域事件和聚合根快照
+        AggregateSnapshot snapshot = ((IOriginator)aggregateRoot).takeSnapshot();
+        storage.save(changes, snapshot);
+
+        //完成改变并发布领域事件
+        aggregateRoot.acceptChanges();
+        changes.stream().forEach(e -> publisher.publish(e));
     }
 
 }

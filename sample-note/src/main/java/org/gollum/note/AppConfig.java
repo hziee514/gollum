@@ -11,6 +11,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
+import org.springframework.scheduling.TaskScheduler;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 
 /**
  * @author wurenhai
@@ -21,33 +23,41 @@ import org.springframework.context.annotation.Scope;
 public class AppConfig {
 
     @Bean
-    @Scope("singleton")
+    @Singleton
     ICommandBus commandBus(ICommandHandlerFactory factory) {
         return new InMemoryCommandBus(factory);
     }
 
     @Bean
-    @Scope("singleton")
+    @Singleton
     ICommandHandlerFactory commandExecutorFactory(ApplicationContext context) {
         return new NoteCommandHandlerFactory(context);
     }
 
     @Bean
-    @Scope("singleton")
+    @Singleton
     IEventStorage eventStorage() {
         return new InMemoryEventStorage();
     }
 
     @Bean
-    @Scope("singleton")
+    @Singleton
     IEventPublisher eventPublisher(IEventHandlerFactory factory) {
         return new InMemoryEventPublisher(factory);
     }
 
     @Bean
-    @Scope("singleton")
+    @Singleton
     IEventHandlerFactory eventHandlerFactory() {
         return new NoteEventHandlerFactory();
+    }
+
+    @Bean
+    @Singleton
+    TaskScheduler taskScheduler() {
+        ThreadPoolTaskScheduler scheduler = new ThreadPoolTaskScheduler();
+        scheduler.setPoolSize(2);
+        return scheduler;
     }
 
 }

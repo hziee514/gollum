@@ -1,7 +1,5 @@
 package org.gollum.core.eventing;
 
-import org.gollum.core.domain.AggregateRoot;
-
 import java.util.List;
 
 /**
@@ -30,11 +28,12 @@ public interface IEventStorage {
     List<DomainEvent> getEvents(String aggregateRootId, int version);
 
     /**
-     * 持久化聚合根状态：未提交的领域事件和快照
+     * 持久化聚合根状态
      *
-     * @param aggregateRoot
+     * @param events 领域事件
+     * @param snapshot 最新快照
      */
-    void save(AggregateRoot aggregateRoot);
+    void save(List<DomainEvent> events, AggregateSnapshot snapshot);
 
     /**
      * 读取聚合根快照

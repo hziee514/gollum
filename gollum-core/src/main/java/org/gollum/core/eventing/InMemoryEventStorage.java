@@ -1,8 +1,5 @@
 package org.gollum.core.eventing;
 
-import org.gollum.core.domain.AggregateRoot;
-import org.gollum.core.domain.IOriginator;
-
 import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
@@ -32,12 +29,8 @@ public class InMemoryEventStorage implements IEventStorage {
     }
 
     @Override
-    public void save(AggregateRoot aggregateRoot) {
-        List<DomainEvent> changes = aggregateRoot.getUncommittedChanges();
-        events.addAll(changes);
-
-        //保存最新快照
-        AggregateSnapshot snapshot = ((IOriginator)aggregateRoot).takeSnapshot();
+    public void save(List<DomainEvent> events, AggregateSnapshot snapshot) {
+        this.events.addAll(events);
         saveSnapshot(snapshot);
     }
 

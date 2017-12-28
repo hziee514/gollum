@@ -24,7 +24,7 @@ public class ChangeNoteTitleCommandHandler implements ICommandHandler<ChangeNote
         Note note = repository.getById(command.getAggregateRootId(), Note.class);
         int version = note.getVersion();
         note.changeTitle(command.getTitle());
-        repository.save(note, version);
+        repository.commit(note, version);
     }
 
 }

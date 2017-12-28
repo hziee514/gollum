@@ -5,7 +5,9 @@ import org.gollum.note.command.ChangeNoteTitleCommand;
 import org.gollum.note.command.CreateNoteCommand;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.scheduling.TaskScheduler;
 
+import java.util.Date;
 import java.util.UUID;
 
 /**
@@ -14,7 +16,7 @@ import java.util.UUID;
  */
 public class Application {
 
-    public static void main( String[] args ) {
+    public static void main( String[] args ) throws Exception {
         ApplicationContext ctx = new AnnotationConfigApplicationContext(AppConfig.class);
         ICommandBus bus = ctx.getBean(ICommandBus.class);
 
@@ -27,7 +29,11 @@ public class Application {
 
         bus.send(new ChangeNoteTitleCommand(aggregateRootId, "change3"));
 
-        System.out.println("");
+        TaskScheduler scheduler = ctx.getBean(TaskScheduler.class);
+
+        scheduler.schedule(() -> System.out.println(System.currentTimeMillis()), new Date(System.currentTimeMillis() + 1000));
+        scheduler.schedule(() -> System.out.println(System.currentTimeMillis()), new Date(System.currentTimeMillis() + 2000));
+        System.out.println(System.currentTimeMillis());
     }
 
 }
