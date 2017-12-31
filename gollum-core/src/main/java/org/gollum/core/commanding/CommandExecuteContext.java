@@ -2,7 +2,7 @@ package org.gollum.core.commanding;
 
 import org.gollum.core.domain.AggregateRoot;
 import org.gollum.core.domain.Repository;
-import org.gollum.core.util.Assertion;
+import org.gollum.core.common.Assertion;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;

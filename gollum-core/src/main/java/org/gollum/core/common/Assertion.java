@@ -1,4 +1,4 @@
-package org.gollum.core.util;
+package org.gollum.core.common;
 
 /**
  * @author wurenhai

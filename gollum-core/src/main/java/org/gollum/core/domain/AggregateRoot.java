@@ -1,7 +1,7 @@
 package org.gollum.core.domain;
 
 import org.gollum.core.eventing.DomainEvent;
-import org.gollum.core.util.TextUtils;
+import org.gollum.core.common.TextUtils;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
