@@ -13,7 +13,7 @@ public abstract class ValueObject {
         final int prime = 31;
         int result = 1;
         for (Object obj : getAttributes()) {
-            result = result * prime + obj.hashCode();
+            result = result * prime + (obj == null ? 0 : obj.hashCode());
         }
         return result;
     }
