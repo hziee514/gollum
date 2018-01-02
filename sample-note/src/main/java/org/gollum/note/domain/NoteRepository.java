@@ -13,10 +13,10 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @Singleton
-public class NoteAbstractRepository extends AbstractRepository<Note> {
+public class NoteRepository extends AbstractRepository<Note> {
 
     @Autowired
-    public NoteAbstractRepository(IEventStorage storage, IEventPublisher publisher) {
+    public NoteRepository(IEventStorage storage, IEventPublisher publisher) {
         super(storage, publisher);
     }
 
