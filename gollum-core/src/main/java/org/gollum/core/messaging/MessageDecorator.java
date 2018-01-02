@@ -4,6 +4,7 @@ package org.gollum.core.messaging;
  * @author wurenhai
  * @date 2017/12/31
  */
+@Deprecated
 public abstract class MessageDecorator<T> implements Message<T> {
 
     private final Message<T> delegate;

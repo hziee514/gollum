@@ -1,9 +1,9 @@
 package org.gollum.note.commandhandler;
 
-import org.gollum.core.commanding.ICommandHandler;
+import org.gollum.core.commanding.CommandHandler;
 import org.gollum.note.command.CreateNoteCommand;
 import org.gollum.note.domain.Note;
-import org.gollum.note.domain.NoteRepository;
+import org.gollum.note.domain.NoteAbstractRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -14,10 +14,10 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @Scope("singleton")
-public class CreateNoteCommandHandler implements ICommandHandler<CreateNoteCommand> {
+public class CreateNoteCommandHandler implements CommandHandler<CreateNoteCommand> {
 
     @Autowired
-    private NoteRepository repository;
+    private NoteAbstractRepository repository;
 
     @Override
     public void exec(CreateNoteCommand command) {

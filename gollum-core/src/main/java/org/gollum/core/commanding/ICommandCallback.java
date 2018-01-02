@@ -4,6 +4,7 @@ package org.gollum.core.commanding;
  * @author wurenhai
  * @date 2017/12/29
  */
+@Deprecated
 public interface ICommandCallback<T extends Command, R> {
 
     /**

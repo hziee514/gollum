@@ -8,6 +8,7 @@ import java.util.Map;
  * @author wurenhai
  * @date 2017/12/31
  */
+@Deprecated
 public interface CommandMessage<T> extends Message<T> {
 
     @Override

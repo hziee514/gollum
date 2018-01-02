@@ -1,6 +1,6 @@
 package org.gollum.note;
 
-import org.gollum.core.commanding.ICommandBus;
+import org.gollum.core.commanding.CommandBus;
 import org.gollum.note.command.ChangeNoteTitleCommand;
 import org.gollum.note.command.CreateNoteCommand;
 import org.springframework.context.ApplicationContext;
@@ -18,7 +18,9 @@ public class Application {
 
     public static void main( String[] args ) throws Exception {
         ApplicationContext ctx = new AnnotationConfigApplicationContext(AppConfig.class);
-        ICommandBus bus = ctx.getBean(ICommandBus.class);
+        CommandBus bus = ctx.getBean(CommandBus.class);
+        CommandBus bus1 = ctx.getBean(CommandBus.class);
+        CommandBus bus2 = ctx.getBean(CommandBus.class);
 
         String aggregateRootId = UUID.randomUUID().toString();
         bus.send(new CreateNoteCommand(aggregateRootId, "hello"));

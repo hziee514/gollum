@@ -11,6 +11,7 @@ import java.util.Map;
  * @author wurenhai
  * @date 2017/12/31
  */
+@Deprecated
 public class GenericCommandMessage<T> extends MessageDecorator<T> implements CommandMessage<T> {
 
     public static <C> CommandMessage<C> asCommandMessage(Object command) {

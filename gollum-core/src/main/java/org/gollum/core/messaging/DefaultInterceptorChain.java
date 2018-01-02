@@ -6,6 +6,7 @@ import java.util.Iterator;
  * @author wurenhai
  * @date 2017/12/31
  */
+@Deprecated
 public class DefaultInterceptorChain<T extends Message<?>> implements InterceptorChain {
 
     private final MessageHandler<? super T> handler;

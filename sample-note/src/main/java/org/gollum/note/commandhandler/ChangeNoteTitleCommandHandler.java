@@ -1,9 +1,9 @@
 package org.gollum.note.commandhandler;
 
-import org.gollum.core.commanding.ICommandHandler;
+import org.gollum.core.commanding.CommandHandler;
 import org.gollum.note.command.ChangeNoteTitleCommand;
 import org.gollum.note.domain.Note;
-import org.gollum.note.domain.NoteRepository;
+import org.gollum.note.domain.NoteAbstractRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -14,10 +14,10 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @Scope("singleton")
-public class ChangeNoteTitleCommandHandler implements ICommandHandler<ChangeNoteTitleCommand> {
+public class ChangeNoteTitleCommandHandler implements CommandHandler<ChangeNoteTitleCommand> {
 
     @Autowired
-    private NoteRepository repository;
+    private NoteAbstractRepository repository;
 
     @Override
     public void exec(ChangeNoteTitleCommand command) {

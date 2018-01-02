@@ -2,9 +2,9 @@ package org.gollum.core.commanding;
 
 /**
  * @author wurenhai
- * @date 2017/12/26
+ * @date 2018/1/2
  */
-public interface ICommandHandler<T extends Command> {
+public interface CommandHandler<T extends AbstractCommand> {
 
     void exec(T command);
 
