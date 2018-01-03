@@ -7,7 +7,7 @@ import java.util.UUID;
  * @author wurenhai
  * @date 2017/12/31
  */
-public class GenericMessage<T> extends AbstractMessage<T> {
+public class GenericMessage<T> extends BaseMessage<T> {
 
     private final MetaData metaData;
     private final T payload;

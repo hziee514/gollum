@@ -1,43 +1,34 @@
 package org.gollum.core.eventing;
 
+import java.io.Serializable;
+
 /**
  * 聚合根快照
  *
  * @author wurenhai
  * @date 2017/12/26
  */
-public abstract class AggregateSnapshot {
+public interface AggregateSnapshot extends Serializable {
 
     /**
-     * 聚合根ID
+     * 获取聚合根ID
+     *
+     * @return
      */
-    private String aggregateRootId;
+    String getAggregateRootId();
 
     /**
-     * 聚合根版本号
+     * 获取聚合根版本号
+     *
+     * @return
      */
-    private int version;
+    int getVersion();
 
     /**
-     * 时间戳
+     * 获取时间戳
+     * @return
      */
-    private long timestamp;
+    @Deprecated
+    long getTimestamp();
 
-    public AggregateSnapshot(String aggregateRootId, int version) {
-        this.aggregateRootId = aggregateRootId;
-        this.version = version;
-        this.timestamp = System.currentTimeMillis();
-    }
-
-    public String getAggregateRootId() {
-        return aggregateRootId;
-    }
-
-    public int getVersion() {
-        return version;
-    }
-
-    public long getTimestamp() {
-        return timestamp;
-    }
 }

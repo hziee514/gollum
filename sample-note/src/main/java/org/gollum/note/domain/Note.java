@@ -1,14 +1,14 @@
 package org.gollum.note.domain;
 
-import org.gollum.core.domain.AggregateRoot;
-import org.gollum.core.domain.IOriginator;
+import org.gollum.core.domain.BaseAggregateRoot;
+import org.gollum.core.domain.AggregateMemento;
 import org.gollum.core.eventing.AggregateSnapshot;
 
 /**
  * @author wurenhai
  * @date 2017/12/26
  */
-public class Note extends AggregateRoot implements IOriginator {
+public class Note extends BaseAggregateRoot implements AggregateMemento {
 
     private String title;
 

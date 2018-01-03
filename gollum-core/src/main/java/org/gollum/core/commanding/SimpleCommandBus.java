@@ -11,28 +11,28 @@ import java.util.Map;
  */
 public class SimpleCommandBus implements CommandBus, CommandConsumer {
 
-    private final Map<Class<? extends AbstractCommand>, CommandHandler<? extends AbstractCommand>> handlers = new HashMap<>();
+    private final Map<Class<? extends Command>, CommandHandler<? extends Command>> handlers = new HashMap<>();
 
     @Override
-    public void send(AbstractCommand command) {
+    public void send(Command command) {
         Assertion.notNull(command, "command");
         consume(command);
     }
 
     @Override
-    public void register(Class<? extends AbstractCommand> type, CommandHandler<? extends AbstractCommand> handler) {
+    public void register(Class<? extends Command> type, CommandHandler<? extends Command> handler) {
         Assertion.notNull(handler, "handler");
         handlers.put(type, handler);
     }
 
     @Override
-    public void consume(AbstractCommand command) {
+    public void consume(Command command) {
         CommandHandler handler = findCommandHandlerFor(command);
         Assertion.notNull(handler, "handler");
         handler.exec(command);
     }
 
-    private CommandHandler<? extends AbstractCommand> findCommandHandlerFor(AbstractCommand command) {
+    private CommandHandler<? extends Command> findCommandHandlerFor(Command command) {
         if (!handlers.containsKey(command.getClass())) {
             return null;
         }

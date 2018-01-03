@@ -6,7 +6,7 @@ package org.gollum.core.domain;
  */
 public abstract class ValueObject {
 
-    abstract Object[] getAttributes();
+    protected abstract Object[] getAttributes();
 
     @Override
     public int hashCode() {

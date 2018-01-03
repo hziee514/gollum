@@ -6,7 +6,7 @@ package org.gollum.core.eventing;
  * @author wurenhai
  * @date 2017/12/26
  */
-public interface IEventHandler<T extends DomainEvent> {
+public interface EventHandler<T extends DomainEvent> {
 
     /**
      * @param event

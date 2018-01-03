@@ -10,21 +10,21 @@ import java.util.stream.Collectors;
  * @author wurenhai
  * @date 2017/12/27
  */
-public class InMemoryEventStorage implements IEventStorage {
+public class InMemoryEventStorage implements EventStorage {
 
     private final List<DomainEvent> events = new LinkedList<>();
     private final List<AggregateSnapshot> snapshots = new LinkedList<>();
 
     @Override
-    public List<DomainEvent> getEvents(String aggregateRootId) {
-        return getEvents(aggregateRootId, -1);
+    public List<DomainEvent> readEvents(String aggregateRootId) {
+        return readEvents(aggregateRootId, -1);
     }
 
     @Override
-    public List<DomainEvent> getEvents(String aggregateRootId, int version) {
+    public List<DomainEvent> readEvents(String aggregateRootId, int version) {
         return events.stream()
-                .filter(e -> aggregateRootId.equals(e.getAggregateRootId()) && e.getVersion() > version)
-                .sorted(Comparator.comparing(DomainEvent::getVersion))
+                .filter(e -> aggregateRootId.equals(e.getAggregateRootId()) && e.getAggregateRootVersion() > version)
+                .sorted(Comparator.comparing(DomainEvent::getAggregateRootVersion))
                 .collect(Collectors.toList());
     }
 
@@ -35,7 +35,7 @@ public class InMemoryEventStorage implements IEventStorage {
     }
 
     @Override
-    public <T extends AggregateSnapshot> T getSnapshot(String aggregateRootId) {
+    public <T extends AggregateSnapshot> T readSnapshot(String aggregateRootId) {
         Optional<AggregateSnapshot> snapshot = snapshots.stream()
                 .filter(a -> aggregateRootId.equals(a.getAggregateRootId()))
                 .max(Comparator.comparing(AggregateSnapshot::getVersion));

@@ -1,12 +1,12 @@
 package org.gollum.note.command;
 
-import org.gollum.core.commanding.AbstractCommand;
+import org.gollum.core.commanding.BaseCommand;
 
 /**
  * @author wurenhai
  * @date 2017/12/26
  */
-public class CreateNoteCommand extends AbstractCommand {
+public class CreateNoteCommand extends BaseCommand {
 
     private String title;
 

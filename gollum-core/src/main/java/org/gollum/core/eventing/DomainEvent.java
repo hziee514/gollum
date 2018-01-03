@@ -1,6 +1,6 @@
 package org.gollum.core.eventing;
 
-import org.gollum.core.infrastructure.Message;
+import java.util.UUID;
 
 /**
  * 领域事件抽象类
@@ -10,7 +10,17 @@ import org.gollum.core.infrastructure.Message;
  * @author wurenhai
  * @date 2017/12/26
  */
-public abstract class DomainEvent extends Message {
+public abstract class DomainEvent {
+
+    /**
+     * 事件ID
+     */
+    private final String id;
+
+    /**
+     * 时间戳
+     */
+    private final long timestamp;
 
     /**
      * 聚合根ID
@@ -20,10 +30,11 @@ public abstract class DomainEvent extends Message {
     /**
      * 事件版本号
      */
-    private int version;
+    private int aggregateRootVersion;
 
     public DomainEvent() {
-        super();
+        this.id = UUID.randomUUID().toString();
+        this.timestamp = System.currentTimeMillis();
     }
 
     public String getAggregateRootId() {
@@ -34,11 +45,11 @@ public abstract class DomainEvent extends Message {
         this.aggregateRootId = aggregateRootId;
     }
 
-    public int getVersion() {
-        return version;
+    public int getAggregateRootVersion() {
+        return aggregateRootVersion;
     }
 
-    public void setVersion(int version) {
-        this.version = version;
+    public void setAggregateRootVersion(int aggregateRootVersion) {
+        this.aggregateRootVersion = aggregateRootVersion;
     }
 }

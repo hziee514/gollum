@@ -2,12 +2,20 @@ package org.gollum.note;
 
 import org.gollum.core.commanding.CommandBus;
 import org.gollum.core.commanding.SimpleCommandBus;
-import org.gollum.core.eventing.*;
+import org.gollum.core.eventing.EventBus;
+import org.gollum.core.eventing.EventStorage;
+import org.gollum.core.eventing.InMemoryEventStorage;
+import org.gollum.core.eventing.SimpleEventBus;
+import org.gollum.core.scheduling.SimpleTaskScheduler;
+import org.gollum.core.scheduling.TinyScheduler;
 import org.gollum.note.command.ChangeNoteTitleCommand;
 import org.gollum.note.command.CreateNoteCommand;
 import org.gollum.note.commandhandler.ChangeNoteTitleCommandHandler;
 import org.gollum.note.commandhandler.CreateNoteCommandHandler;
-import org.gollum.note.eventhandler.NoteEventHandlerFactory;
+import org.gollum.note.domain.NoteCreated;
+import org.gollum.note.domain.NoteTitleChanged;
+import org.gollum.note.eventhandler.NoteCreatedHandler;
+import org.gollum.note.eventhandler.NoteTitleChangedHandler;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -35,20 +43,17 @@ public class AppConfig {
 
     @Bean
     @Singleton
-    IEventStorage eventStorage() {
+    EventStorage eventStorage() {
         return new InMemoryEventStorage();
     }
 
     @Bean
     @Singleton
-    IEventPublisher eventPublisher(IEventHandlerFactory factory) {
-        return new InMemoryEventPublisher(factory);
-    }
-
-    @Bean
-    @Singleton
-    IEventHandlerFactory eventHandlerFactory() {
-        return new NoteEventHandlerFactory();
+    EventBus eventBus(ApplicationContext context) {
+        SimpleEventBus bus = new SimpleEventBus();
+        bus.register(NoteCreated.class, context.getBean(NoteCreatedHandler.class));
+        bus.register(NoteTitleChanged.class, context.getBean(NoteTitleChangedHandler.class));
+        return bus;
     }
 
     @Bean
@@ -57,6 +62,12 @@ public class AppConfig {
         ThreadPoolTaskScheduler scheduler = new ThreadPoolTaskScheduler();
         scheduler.setPoolSize(2);
         return scheduler;
+    }
+
+    @Bean
+    @Singleton
+    TinyScheduler tinyScheduler() {
+        return new SimpleTaskScheduler();
     }
 
 }

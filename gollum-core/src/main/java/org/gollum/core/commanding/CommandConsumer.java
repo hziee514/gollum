@@ -6,8 +6,8 @@ package org.gollum.core.commanding;
  */
 public interface CommandConsumer {
 
-    void register(Class<? extends AbstractCommand> type, CommandHandler<? extends AbstractCommand> handler);
+    void register(Class<? extends Command> type, CommandHandler<? extends Command> handler);
 
-    void consume(AbstractCommand command);
+    void consume(Command command);
 
 }

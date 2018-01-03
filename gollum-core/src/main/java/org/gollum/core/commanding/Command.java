@@ -29,6 +29,6 @@ public interface Command extends Serializable {
      *
      * @return
      */
-    int getAggregateRootVersion();
+    int getVersion();
 
 }

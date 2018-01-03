@@ -6,16 +6,16 @@ import java.util.Map;
  * @author wurenhai
  * @date 2017/12/31
  */
-public abstract class AbstractMessage<T> implements Message<T> {
+public abstract class BaseMessage<T> implements Message<T> {
 
     private final String id;
     private final long timestamp;
 
-    public AbstractMessage(String id) {
+    public BaseMessage(String id) {
         this(id, System.currentTimeMillis());
     }
 
-    public AbstractMessage(String id, long timestamp) {
+    public BaseMessage(String id, long timestamp) {
         this.id = id;
         this.timestamp = timestamp;
     }

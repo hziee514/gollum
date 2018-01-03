@@ -2,8 +2,8 @@ package org.gollum.core.domain;
 
 import org.gollum.core.eventing.AggregateSnapshot;
 import org.gollum.core.eventing.DomainEvent;
-import org.gollum.core.eventing.IEventPublisher;
-import org.gollum.core.eventing.IEventStorage;
+import org.gollum.core.eventing.EventBus;
+import org.gollum.core.eventing.EventStorage;
 
 import java.util.List;
 
@@ -14,12 +14,12 @@ import java.util.List;
  * @author wurenhai
  * @date 2017/12/26
  */
-public class AbstractRepository<T extends AggregateRoot> implements Repository<T> {
+public class BaseRepository<T extends BaseAggregateRoot> implements Repository<T> {
 
-    private final IEventStorage storage;
-    private final IEventPublisher publisher;
+    private final EventStorage storage;
+    private final EventBus publisher;
 
-    public AbstractRepository(IEventStorage storage, IEventPublisher publisher) {
+    public BaseRepository(EventStorage storage, EventBus publisher) {
         this.storage = storage;
         this.publisher = publisher;
     }
@@ -32,19 +32,19 @@ public class AbstractRepository<T extends AggregateRoot> implements Repository<T
      * @return
      */
     @Override
-    public T getById(String aggregateRootId, Class<? extends AggregateRoot> type) {
+    public T getById(String aggregateRootId, Class<? extends BaseAggregateRoot> type) {
         List<DomainEvent> events;
-        AggregateSnapshot snapshot = storage.getSnapshot(aggregateRootId);
+        AggregateSnapshot snapshot = storage.readSnapshot(aggregateRootId);
         if (snapshot == null) {
-            events = storage.getEvents(aggregateRootId);
+            events = storage.readEvents(aggregateRootId);
         } else {
-            events = storage.getEvents(aggregateRootId, snapshot.getVersion());
+            events = storage.readEvents(aggregateRootId, snapshot.getVersion());
         }
 
         try {
             T instance = (T)type.newInstance();
             if (snapshot != null) {
-                ((IOriginator)instance).restoreFromSnapshot(snapshot);
+                ((AggregateMemento)instance).restoreFromSnapshot(snapshot);
             }
             if (!events.isEmpty()) {
                 instance.replayEvents(events);
@@ -64,21 +64,21 @@ public class AbstractRepository<T extends AggregateRoot> implements Repository<T
      * @param expectedVersion 期望修订的版本号, -1表示是新建
      */
     @Override
-    public void commit(AggregateRoot aggregateRoot, int expectedVersion) {
-        List<DomainEvent> changes = aggregateRoot.getUncommittedChanges();
+    public void commit(BaseAggregateRoot aggregateRoot, int expectedVersion) {
+        List<DomainEvent> changes = aggregateRoot.getChanges();
         if (changes.isEmpty()) {
             return;
         }
         //TODO: 同步加锁
         if (expectedVersion != -1) {
-            AggregateRoot item = getById(aggregateRoot.getId(), aggregateRoot.getClass());
+            BaseAggregateRoot item = getById(aggregateRoot.getId(), aggregateRoot.getClass());
             if (item.getVersion() != expectedVersion) {
                 throw new IllegalStateException();
             }
         }
 
         //存储领域事件和聚合根快照
-        AggregateSnapshot snapshot = ((IOriginator)aggregateRoot).takeSnapshot();
+        AggregateSnapshot snapshot = ((AggregateMemento)aggregateRoot).takeSnapshot();
         storage.save(changes, snapshot);
 
         //完成改变并发布领域事件

@@ -8,7 +8,7 @@ import java.util.List;
  * @author wurenhai
  * @date 2017/12/26
  */
-public interface IEventStorage {
+public interface EventStorage {
 
     /**
      * 读取聚合根的所有历史事件
@@ -16,7 +16,7 @@ public interface IEventStorage {
      * @param aggregateRootId
      * @return
      */
-    List<DomainEvent> getEvents(String aggregateRootId);
+    List<DomainEvent> readEvents(String aggregateRootId);
 
     /**
      * 读取聚合根指定版本号以后的历史事件
@@ -25,7 +25,7 @@ public interface IEventStorage {
      * @param version
      * @return
      */
-    List<DomainEvent> getEvents(String aggregateRootId, int version);
+    List<DomainEvent> readEvents(String aggregateRootId, int version);
 
     /**
      * 持久化聚合根状态
@@ -42,7 +42,7 @@ public interface IEventStorage {
      * @param <T>
      * @return
      */
-    <T extends AggregateSnapshot> T getSnapshot(String aggregateRootId);
+    <T extends AggregateSnapshot> T readSnapshot(String aggregateRootId);
 
     /**
      * 持久化聚合根快照

@@ -9,7 +9,7 @@ import java.util.UUID;
  * @author wurenhai
  * @date 2018/1/2
  */
-public abstract class AbstractCommand implements Command {
+public abstract class BaseCommand implements Command {
 
     /**
      * Command自身ID
@@ -24,16 +24,16 @@ public abstract class AbstractCommand implements Command {
     /**
      * 聚合根版本号
      */
-    private final int aggregateRootVersion;
+    private final int version;
 
-    public AbstractCommand(String aggregateRootId) {
+    public BaseCommand(String aggregateRootId) {
         this(aggregateRootId, 0);
     }
 
-    public AbstractCommand(String aggregateRootId, int aggregateRootVersion) {
+    public BaseCommand(String aggregateRootId, int version) {
         this.id = UUID.randomUUID().toString();
         this.aggregateRootId = aggregateRootId;
-        this.aggregateRootVersion = aggregateRootVersion;
+        this.version = version;
     }
 
     @Override
@@ -47,7 +47,7 @@ public abstract class AbstractCommand implements Command {
     }
 
     @Override
-    public int getAggregateRootVersion() {
-        return aggregateRootVersion;
+    public int getVersion() {
+        return version;
     }
 }

@@ -1,8 +1,8 @@
 package org.gollum.note.domain;
 
-import org.gollum.core.domain.AbstractRepository;
-import org.gollum.core.eventing.IEventPublisher;
-import org.gollum.core.eventing.IEventStorage;
+import org.gollum.core.domain.BaseRepository;
+import org.gollum.core.eventing.EventBus;
+import org.gollum.core.eventing.EventStorage;
 import org.gollum.note.Singleton;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -13,10 +13,10 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @Singleton
-public class NoteRepository extends AbstractRepository<Note> {
+public class NoteRepository extends BaseRepository<Note> {
 
     @Autowired
-    public NoteRepository(IEventStorage storage, IEventPublisher publisher) {
+    public NoteRepository(EventStorage storage, EventBus publisher) {
         super(storage, publisher);
     }
 

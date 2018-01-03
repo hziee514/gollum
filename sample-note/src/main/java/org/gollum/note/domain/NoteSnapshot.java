@@ -1,12 +1,12 @@
 package org.gollum.note.domain;
 
-import org.gollum.core.eventing.AggregateSnapshot;
+import org.gollum.core.eventing.BaseAggregateSnapshot;
 
 /**
  * @author wurenhai
  * @date 2017/12/26
  */
-public class NoteSnapshot extends AggregateSnapshot {
+public class NoteSnapshot extends BaseAggregateSnapshot {
 
     private String title;
 

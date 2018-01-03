@@ -6,6 +6,6 @@ package org.gollum.core.commanding;
  */
 public interface CommandBus {
 
-    void send(AbstractCommand command);
+    void send(Command command);
 
 }

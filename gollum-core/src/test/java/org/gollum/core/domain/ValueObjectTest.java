@@ -19,7 +19,7 @@ public class ValueObjectTest {
             this.a = a;
         }
 
-        Object[] getAttributes() {
+        protected Object[] getAttributes() {
             return new Object[] { a };
         }
     }
@@ -32,7 +32,7 @@ public class ValueObjectTest {
             this.b = b;
         }
 
-        Object[] getAttributes() {
+        protected Object[] getAttributes() {
             return new Object[] { b };
         }
     }
@@ -48,7 +48,7 @@ public class ValueObjectTest {
             this.c = c;
         }
 
-        Object[] getAttributes() {
+        protected Object[] getAttributes() {
             return new Object[] { obj, c };
         }
     }
