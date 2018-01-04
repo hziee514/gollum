@@ -9,6 +9,7 @@
     <module>gollum-common</module>
     <module>gollum-core</module>
     <module>sample-note</module>
+    <module>sample-bank</module>
   </modules>
   <packaging>pom</packaging>
 

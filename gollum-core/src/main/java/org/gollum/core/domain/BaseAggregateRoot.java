@@ -72,7 +72,7 @@ public abstract class BaseAggregateRoot implements AggregateRoot {
             applyChange(e, false);
         }
         if (!history.isEmpty()) {
-            this.version = history.get(history.size() - 1).getAggregateRootVersion();
+            this.version = history.get(history.size() - 1).getVersion();
         }
     }
 
@@ -113,7 +113,7 @@ public abstract class BaseAggregateRoot implements AggregateRoot {
         if (isNew) {
             this.version++;
             event.setAggregateRootId(this.id);
-            event.setAggregateRootVersion(this.version);
+            event.setVersion(this.version);
             changes.add(event);
         }
     }

@@ -30,7 +30,7 @@ public abstract class DomainEvent {
     /**
      * 事件版本号
      */
-    private int aggregateRootVersion;
+    private int version;
 
     public DomainEvent() {
         this.id = UUID.randomUUID().toString();
@@ -45,11 +45,11 @@ public abstract class DomainEvent {
         this.aggregateRootId = aggregateRootId;
     }
 
-    public int getAggregateRootVersion() {
-        return aggregateRootVersion;
+    public int getVersion() {
+        return version;
     }
 
-    public void setAggregateRootVersion(int aggregateRootVersion) {
-        this.aggregateRootVersion = aggregateRootVersion;
+    public void setVersion(int version) {
+        this.version = version;
     }
 }

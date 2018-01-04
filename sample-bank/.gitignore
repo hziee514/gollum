@@ -1,5 +1,3 @@
 /.idea/
 /target/
-/out/
 *.iml
-*.~ml

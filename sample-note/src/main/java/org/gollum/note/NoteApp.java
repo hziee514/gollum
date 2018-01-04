@@ -6,19 +6,17 @@ import org.gollum.note.command.ChangeNoteTitleCommand;
 import org.gollum.note.command.CreateNoteCommand;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import org.springframework.scheduling.TaskScheduler;
 
-import java.util.Date;
 import java.util.UUID;
 
 /**
  * Hello world!
  *
  */
-public class Application {
+public class NoteApp {
 
     public static void main( String[] args ) throws Exception {
-        ApplicationContext ctx = new AnnotationConfigApplicationContext(AppConfig.class);
+        ApplicationContext ctx = new AnnotationConfigApplicationContext(NoteAppConfig.class);
         CommandBus bus = ctx.getBean(CommandBus.class);
         CommandBus bus1 = ctx.getBean(CommandBus.class);
         CommandBus bus2 = ctx.getBean(CommandBus.class);

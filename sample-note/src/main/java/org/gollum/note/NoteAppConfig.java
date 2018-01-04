@@ -29,12 +29,12 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
  */
 @Configuration
 @ComponentScan
-public class AppConfig {
+public class NoteAppConfig {
 
     @Bean
     @Singleton
     CommandBus commandBus(ApplicationContext context) {
-        System.out.println("AppConfig.commandBus()");
+        System.out.println("NoteAppConfig.commandBus()");
         SimpleCommandBus bus = new SimpleCommandBus();
         bus.register(CreateNoteCommand.class, context.getBean(CreateNoteCommandHandler.class));
         bus.register(ChangeNoteTitleCommand.class, context.getBean(ChangeNoteTitleCommandHandler.class));

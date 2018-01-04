@@ -23,8 +23,8 @@ public class InMemoryEventStorage implements EventStorage {
     @Override
     public List<DomainEvent> readEvents(String aggregateRootId, int version) {
         return events.stream()
-                .filter(e -> aggregateRootId.equals(e.getAggregateRootId()) && e.getAggregateRootVersion() > version)
-                .sorted(Comparator.comparing(DomainEvent::getAggregateRootVersion))
+                .filter(e -> aggregateRootId.equals(e.getAggregateRootId()) && e.getVersion() > version)
+                .sorted(Comparator.comparing(DomainEvent::getVersion))
                 .collect(Collectors.toList());
     }
 
