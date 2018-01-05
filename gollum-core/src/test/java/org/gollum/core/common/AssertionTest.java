@@ -8,7 +8,7 @@ import org.junit.Test;
  */
 public class AssertionTest {
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = InvalidArgumentException.class)
     public void notNull_withNull() throws Exception {
         Object obj = null;
         Assertion.notNull(obj, "object");
@@ -20,13 +20,13 @@ public class AssertionTest {
         Assertion.notNull(obj, "object");
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = InvalidArgumentException.class)
     public void notNullOrEmpty_withNull() throws Exception {
         String str = null;
         Assertion.notNullOrEmpty(str, "string");
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = InvalidArgumentException.class)
     public void notNullOrEmpty_withEmpty() throws Exception {
         String str = "";
         Assertion.notNullOrEmpty(str, "string");
@@ -38,12 +38,12 @@ public class AssertionTest {
         Assertion.notNullOrEmpty(str, "string");
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = InvalidArgumentException.class)
     public void negative_withZero() throws Exception {
         Assertion.negative(0, "number");
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = InvalidArgumentException.class)
     public void negative_withPositive() throws Exception {
         Assertion.negative(1, "number");
     }
@@ -53,12 +53,12 @@ public class AssertionTest {
         Assertion.negative(-1, "number");
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = InvalidArgumentException.class)
     public void positive_withZero() throws Exception {
         Assertion.positive(0, "number");
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = InvalidArgumentException.class)
     public void positive_withNegative() throws Exception {
         Assertion.positive(-1, "number");
     }
@@ -68,7 +68,7 @@ public class AssertionTest {
         Assertion.positive(1, "number");
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = InvalidArgumentException.class)
     public void nonNegative_withNegative() throws Exception {
         Assertion.nonNegative(-1, "number");
     }
@@ -79,7 +79,7 @@ public class AssertionTest {
         Assertion.nonNegative(1, "number");
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = InvalidArgumentException.class)
     public void nonPositive_withPositive() throws Exception {
         Assertion.nonPositive(1, "number");
     }

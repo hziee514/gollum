@@ -41,6 +41,11 @@ public class BaseRepository<T extends BaseAggregateRoot> implements Repository<T
             events = storage.readEvents(aggregateRootId, snapshot.getVersion());
         }
 
+        //既没有快照也没有历史事件时认为不存在此聚合根
+        if (snapshot == null && events.isEmpty()) {
+            return null;
+        }
+
         try {
             T instance = (T)type.newInstance();
             if (snapshot != null) {
@@ -57,6 +62,8 @@ public class BaseRepository<T extends BaseAggregateRoot> implements Repository<T
         }
     }
 
+    private static Object locker = new Object();
+
     /**
      * 提交聚合根的变更
      *
@@ -69,20 +76,26 @@ public class BaseRepository<T extends BaseAggregateRoot> implements Repository<T
         if (changes.isEmpty()) {
             return;
         }
-        //TODO: 同步加锁
-        if (expectedVersion != -1) {
-            BaseAggregateRoot item = getById(aggregateRoot.getId(), aggregateRoot.getClass());
-            if (item.getVersion() != expectedVersion) {
-                throw new IllegalStateException();
+
+        //TODO: 对同一个聚合根要同步加锁或者事物控制, 在CommandConsumer中加锁也可以
+        //TODO: 在此之前使用mailbox将对同一个聚合根的操作转为串行处理也可以
+        synchronized (locker) {
+            if (expectedVersion != -1) {
+                AggregateRoot item = getById(aggregateRoot.getId(), aggregateRoot.getClass());
+                if (item.getVersion() != expectedVersion) {
+                    throw new ConcurrencyException(String.format("id=%s, version=%d, expected=%d",
+                            aggregateRoot.getId(), aggregateRoot.getVersion(), expectedVersion));
+                }
             }
+
+            //存储领域事件和聚合根快照
+            AggregateSnapshot snapshot = ((AggregateMemento) aggregateRoot).takeSnapshot();
+            storage.save(changes, snapshot);
+
+            aggregateRoot.acceptChanges();
         }
 
-        //存储领域事件和聚合根快照
-        AggregateSnapshot snapshot = ((AggregateMemento)aggregateRoot).takeSnapshot();
-        storage.save(changes, snapshot);
-
         //完成改变并发布领域事件
-        aggregateRoot.acceptChanges();
         changes.stream().forEach(e -> publisher.publish(e));
     }
 

@@ -1,6 +1,8 @@
 package org.gollum.core.eventing;
 
 import org.gollum.core.common.Assertion;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -14,6 +16,8 @@ import java.util.concurrent.Executors;
  * @date 2018/1/3
  */
 public class SimpleEventBus implements EventBus, EventConsumer {
+
+    private final Logger LOG = LoggerFactory.getLogger(getClass());
 
     private final Map<Class<? extends DomainEvent>, Set<EventHandler<? extends DomainEvent>>> handlers = new HashMap<>();
 
@@ -42,6 +46,9 @@ public class SimpleEventBus implements EventBus, EventConsumer {
 
     @Override
     public <T extends DomainEvent> void consume(T e) {
+        if (LOG.isTraceEnabled()) {
+            LOG.trace("consume: {}", e);
+        }
         for (EventHandler handler : findHandlersFor(e.getClass())) {
             handler.handle(e);
         }

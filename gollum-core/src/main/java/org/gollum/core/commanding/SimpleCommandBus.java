@@ -1,9 +1,15 @@
 package org.gollum.core.commanding;
 
 import org.gollum.core.common.Assertion;
+import org.gollum.core.common.GollumException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 /**
  * @author wurenhai
@@ -11,12 +17,30 @@ import java.util.Map;
  */
 public class SimpleCommandBus implements CommandBus, CommandConsumer {
 
+    private final Logger LOG = LoggerFactory.getLogger(getClass());
+
     private final Map<Class<? extends Command>, CommandHandler<? extends Command>> handlers = new HashMap<>();
 
+    private final ExecutorService executor;
+
+    public SimpleCommandBus() {
+        this(Executors.newSingleThreadExecutor());
+    }
+
+    public SimpleCommandBus(ExecutorService executor) {
+        this.executor = executor;
+    }
+
     @Override
-    public void send(Command command) {
+    public Future<?> send(final Command command) {
         Assertion.notNull(command, "command");
-        consume(command);
+        return executor.submit(() -> {
+            try {
+                consume(command);
+            } catch (GollumException e) {
+                LOG.error(e.getMessage(), e);
+            }
+        });
     }
 
     @Override
@@ -27,6 +51,9 @@ public class SimpleCommandBus implements CommandBus, CommandConsumer {
 
     @Override
     public void consume(Command command) {
+        if (LOG.isTraceEnabled()) {
+            LOG.trace("consume: {}", command.toString());
+        }
         CommandHandler handler = findCommandHandlerFor(command);
         Assertion.notNull(handler, "handler");
         handler.exec(command);

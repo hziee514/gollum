@@ -15,7 +15,7 @@ public final class Assertion {
      */
     public static <T> void notNull(T argument, String name) {
         if (argument == null) {
-            throw new IllegalArgumentException(name + " cannot be null");
+            throw new InvalidArgumentException(name + " cannot be null");
         }
     }
 
@@ -27,7 +27,7 @@ public final class Assertion {
      */
     public static void notNullOrEmpty(String argument, String name) {
         if (argument == null || argument.isEmpty()) {
-            throw new IllegalArgumentException(name + " cannot be null or empty");
+            throw new InvalidArgumentException(name + " cannot be null or empty");
         }
     }
 
@@ -39,7 +39,7 @@ public final class Assertion {
      */
     public static void negative(int number, String name) {
         if (number >= 0) {
-            throw new IllegalArgumentException(name + " should be negative");
+            throw new InvalidArgumentException(name + " should be negative");
         }
     }
 
@@ -51,7 +51,7 @@ public final class Assertion {
      */
     public static void positive(int number, String name) {
         if (number <= 0) {
-            throw new IllegalArgumentException(name + " should be positive");
+            throw new InvalidArgumentException(name + " should be positive");
         }
     }
 
@@ -63,7 +63,7 @@ public final class Assertion {
      */
     public static void nonNegative(int number, String name) {
         if (number < 0) {
-            throw new IllegalArgumentException(name + " should be non-negative");
+            throw new InvalidArgumentException(name + " should be non-negative");
         }
     }
 
@@ -75,7 +75,7 @@ public final class Assertion {
      */
     public static void nonPositive(int number, String name) {
         if (number > 0) {
-            throw new IllegalArgumentException(name + " should be non-positive");
+            throw new InvalidArgumentException(name + " should be non-positive");
         }
     }
 

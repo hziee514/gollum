@@ -2,7 +2,6 @@ package org.gollum.core.domain;
 
 import org.gollum.core.eventing.DomainEvent;
 
-import java.util.Collection;
 import java.util.List;
 
 /**
@@ -46,7 +45,7 @@ public interface AggregateRoot {
      *
      * @return
      */
-    Collection<DomainEvent> getChanges();
+    List<DomainEvent> getChanges();
 
     /**
      * 变更已提交, 清理数据
