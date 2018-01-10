@@ -8,8 +8,7 @@ import org.gollum.bank.domain.account.TransactionPreparationCommitted;
 import org.gollum.bank.domain.deposit.DepositTransactionCompleted;
 import org.gollum.bank.domain.deposit.DepositTransactionPreparationCompleted;
 import org.gollum.bank.domain.deposit.DepositTransactionStarted;
-import org.gollum.bank.eventhandler.LoggingHandler;
-import org.gollum.bank.eventhandler.logging.*;
+import org.gollum.bank.eventhandler.LogHandler;
 import org.gollum.bank.saga.deposit.DepositTransactionPreparationCompletedSagaHandler;
 import org.gollum.bank.saga.deposit.DepositTransactionStartedSagaHandler;
 import org.gollum.bank.saga.deposit.TransactionPreparationAddedSagaHandler;
@@ -40,7 +39,7 @@ public class BankAppConfig {
     @Bean
     @Singleton
     CommandBus commandBus(ApplicationContext ctx) {
-        SimpleCommandBus bus = new SimpleCommandBus(Executors.newFixedThreadPool(1));
+        SimpleCommandBus bus = new SimpleCommandBus(Executors.newFixedThreadPool(2));
         bus.register(CreateAccountCommand.class, ctx.getBean(CreateAccountCommandHandler.class));
         bus.register(StartDepositTransactionCommand.class, ctx.getBean(StartDepositTransactionCommandHandler.class));
         bus.register(AddTransactionPreparationCommand.class, ctx.getBean(AddTransactionPreparationCommandHandler.class));
@@ -60,21 +59,21 @@ public class BankAppConfig {
     @Singleton
     EventBus eventBus(ApplicationContext ctx) {
         SimpleEventBus bus = new SimpleEventBus();
-        bus.register(BankAccountCreated.class, ctx.getBean(LoggingHandler.BankAccountCreatedLoggingHandler.class));
+        bus.register(BankAccountCreated.class, ctx.getBean(LogHandler.BankAccountCreatedLogHandler.class));
 
-        bus.register(DepositTransactionStarted.class, ctx.getBean(DepositTransactionStartedLoggingHandler.class));
+        bus.register(DepositTransactionStarted.class, ctx.getBean(LogHandler.DepositTransactionStartedLogHandler.class));
         bus.register(DepositTransactionStarted.class, ctx.getBean(DepositTransactionStartedSagaHandler.class));
 
-        bus.register(TransactionPreparationAdded.class, ctx.getBean(TransactionPreparationAddedLoggingHandler.class));
+        bus.register(TransactionPreparationAdded.class, ctx.getBean(LogHandler.TransactionPreparationAddedLogHandler.class));
         bus.register(TransactionPreparationAdded.class, ctx.getBean(TransactionPreparationAddedSagaHandler.class));
 
-        bus.register(DepositTransactionPreparationCompleted.class, ctx.getBean(DepositTransactionPreparationCompletedLoggingHandler.class));
+        bus.register(DepositTransactionPreparationCompleted.class, ctx.getBean(LogHandler.DepositTransactionPreparationCompletedLogHandler.class));
         bus.register(DepositTransactionPreparationCompleted.class, ctx.getBean(DepositTransactionPreparationCompletedSagaHandler.class));
 
-        bus.register(TransactionPreparationCommitted.class, ctx.getBean(TransactionPreparationCommittedLoggingHandler.class));
+        bus.register(TransactionPreparationCommitted.class, ctx.getBean(LogHandler.TransactionPreparationCommittedLogHandler.class));
         bus.register(TransactionPreparationCommitted.class, ctx.getBean(TransactionPreparationCommittedSagaHandler.class));
 
-        bus.register(DepositTransactionCompleted.class, ctx.getBean(LoggingHandler.DepositTransactionCompletedLoggingHandler.class));
+        bus.register(DepositTransactionCompleted.class, ctx.getBean(LogHandler.DepositTransactionCompletedLogHandler.class));
 
         return bus;
     }

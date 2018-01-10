@@ -13,7 +13,7 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
  */
 public class BankApp {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         ApplicationContext ctx = new AnnotationConfigApplicationContext(BankAppConfig.class);
         CommandBus bus = ctx.getBean(CommandBus.class);
 
@@ -29,10 +29,14 @@ public class BankApp {
         bus.sendSync(new CreateAccountCommand(account1, "冬去"));
         bus.sendSync(new CreateAccountCommand(account2, "春来"));
 
+        Thread.sleep(100);
         bus.send(new StartDepositTransactionCommand(idGen.newStringId("DT"), account1, 1000));
+        Thread.sleep(100);
         bus.send(new StartDepositTransactionCommand(idGen.newStringId("DT"), account2, 1000));
+        Thread.sleep(100);
         bus.send(new StartDepositTransactionCommand(idGen.newStringId("DT"), account1, 2000));
 
+        Thread.sleep(100);
         bus.send(new StartDepositTransactionCommand(idGen.newStringId("DT"), account3, 1000));
 
         System.out.println();
