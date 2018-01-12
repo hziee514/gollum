@@ -4,8 +4,8 @@ import org.gollum.bank.Singleton;
 import org.gollum.bank.command.CommitTransactionPreparationCommand;
 import org.gollum.bank.domain.account.BankAccount;
 import org.gollum.bank.domain.account.BankAccountRepository;
+import org.gollum.common.util.Assertion;
 import org.gollum.core.commanding.CommandHandler;
-import org.gollum.core.common.Assertion;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

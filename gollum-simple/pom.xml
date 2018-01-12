@@ -7,10 +7,10 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>gollum-core</artifactId>
+    <artifactId>gollum-simple</artifactId>
     <packaging>jar</packaging>
 
-    <name>gollum-core</name>
+    <name>gollum-simple</name>
     <url>http://maven.apache.org</url>
 
     <properties>
@@ -22,16 +22,6 @@
             <groupId>org.gollum</groupId>
             <artifactId>gollum-common</artifactId>
             <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.google.code.gson</groupId>
-            <artifactId>gson</artifactId>
-            <version>2.8.2</version>
-        </dependency>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-            <version>1.7.25</version>
         </dependency>
     </dependencies>
 </project>

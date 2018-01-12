@@ -1,7 +1,7 @@
 package org.gollum.note;
 
+import org.gollum.common.scheduling.TinyScheduler;
 import org.gollum.core.commanding.CommandBus;
-import org.gollum.core.scheduling.TinyScheduler;
 import org.gollum.note.command.ChangeNoteTitleCommand;
 import org.gollum.note.command.CreateNoteCommand;
 import org.springframework.context.ApplicationContext;

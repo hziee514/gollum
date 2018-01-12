@@ -13,14 +13,14 @@ import org.gollum.bank.saga.deposit.DepositTransactionPreparationCompletedSagaHa
 import org.gollum.bank.saga.deposit.DepositTransactionStartedSagaHandler;
 import org.gollum.bank.saga.deposit.TransactionPreparationAddedSagaHandler;
 import org.gollum.bank.saga.deposit.TransactionPreparationCommittedSagaHandler;
+import org.gollum.common.scheduling.SimpleTaskScheduler;
+import org.gollum.common.scheduling.TinyScheduler;
 import org.gollum.core.commanding.CommandBus;
 import org.gollum.core.commanding.SimpleCommandBus;
 import org.gollum.core.eventing.EventBus;
 import org.gollum.core.eventing.EventStorage;
 import org.gollum.core.eventing.InMemoryEventStorage;
 import org.gollum.core.eventing.SimpleEventBus;
-import org.gollum.core.scheduling.SimpleTaskScheduler;
-import org.gollum.core.scheduling.TinyScheduler;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;

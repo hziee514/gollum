@@ -1,13 +1,13 @@
 package org.gollum.note;
 
+import org.gollum.common.scheduling.SimpleTaskScheduler;
+import org.gollum.common.scheduling.TinyScheduler;
 import org.gollum.core.commanding.CommandBus;
 import org.gollum.core.commanding.SimpleCommandBus;
 import org.gollum.core.eventing.EventBus;
 import org.gollum.core.eventing.EventStorage;
 import org.gollum.core.eventing.InMemoryEventStorage;
 import org.gollum.core.eventing.SimpleEventBus;
-import org.gollum.core.scheduling.SimpleTaskScheduler;
-import org.gollum.core.scheduling.TinyScheduler;
 import org.gollum.note.command.ChangeNoteTitleCommand;
 import org.gollum.note.command.CreateNoteCommand;
 import org.gollum.note.commandhandler.ChangeNoteTitleCommandHandler;

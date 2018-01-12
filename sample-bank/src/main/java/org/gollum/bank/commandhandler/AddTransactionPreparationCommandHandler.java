@@ -4,8 +4,8 @@ import org.gollum.bank.Singleton;
 import org.gollum.bank.command.AddTransactionPreparationCommand;
 import org.gollum.bank.domain.account.BankAccount;
 import org.gollum.bank.domain.account.BankAccountRepository;
+import org.gollum.common.util.Assertion;
 import org.gollum.core.commanding.CommandHandler;
-import org.gollum.core.common.Assertion;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -23,7 +23,7 @@ public class AddTransactionPreparationCommandHandler implements CommandHandler<A
     @Override
     public void exec(AddTransactionPreparationCommand command) {
         BankAccount bankAccount = repository.getById(command.getAggregateRootId(), BankAccount.class);
-        Assertion.notNull(bankAccount, "bankAccount");
+        Assertion.notNull(bankAccount, "BankAccount[%s]", command.getAggregateRootId());
         int version = bankAccount.getVersion();
         bankAccount.addTransactionPreparation(command.getTransactionId(),
                 command.getTransactionType(),

@@ -1,7 +1,7 @@
 package org.gollum.core.commanding;
 
-import org.gollum.core.common.Assertion;
-import org.gollum.core.common.GollumException;
+import org.gollum.common.exception.GollumException;
+import org.gollum.common.util.Assertion;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -1,6 +1,6 @@
 package org.gollum.core.eventing;
 
-import org.gollum.core.common.Assertion;
+import org.gollum.common.util.Assertion;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -2,8 +2,9 @@ package org.gollum.bank;
 
 import org.gollum.bank.command.CreateAccountCommand;
 import org.gollum.bank.command.StartDepositTransactionCommand;
+import org.gollum.common.util.ObjectId;
+import org.gollum.common.util.SnowflakeId;
 import org.gollum.core.commanding.CommandBus;
-import org.gollum.core.common.ObjectId;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
@@ -17,7 +18,7 @@ public class BankApp {
         ApplicationContext ctx = new AnnotationConfigApplicationContext(BankAppConfig.class);
         CommandBus bus = ctx.getBean(CommandBus.class);
 
-        ObjectId idGen = new ObjectId();
+        ObjectId idGen = new SnowflakeId();
 
         String account1 = "1111";
         String account2 = "2222";
