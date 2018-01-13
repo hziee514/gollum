@@ -98,8 +98,7 @@ public abstract class BaseAggregateRoot implements AggregateRoot {
     private void applyChange(DomainEvent event, boolean isNew) {
         try {
             //自身响应事件改变自身状态, 要求方法名必须为handle, 且不能被混淆
-            //fixme: 这样用性能不好，需要优化?
-            Method m = getClass().getMethod("handle", event.getClass());
+            Method m = getClass().getDeclaredMethod("handle", event.getClass());
             m.setAccessible(true);
             m.invoke(this, event);
         } catch (NoSuchMethodException e) {

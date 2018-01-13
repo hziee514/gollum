@@ -5,6 +5,7 @@ import org.gollum.core.eventing.DomainEvent;
 import org.gollum.core.eventing.EventBus;
 import org.gollum.core.eventing.EventStorage;
 
+import java.lang.reflect.ParameterizedType;
 import java.util.List;
 
 /**
@@ -31,6 +32,7 @@ public class BaseRepository<T extends BaseAggregateRoot> implements Repository<T
      * @param type
      * @return
      */
+    @SuppressWarnings("unchecked")
     @Override
     public T getById(String aggregateRootId, Class<? extends BaseAggregateRoot> type) {
         List<DomainEvent> events;
@@ -46,8 +48,11 @@ public class BaseRepository<T extends BaseAggregateRoot> implements Repository<T
             return null;
         }
 
+        Class<T> aggregateRootType = (Class<T>)((ParameterizedType)getClass().getGenericSuperclass()).getActualTypeArguments()[0];
+
         try {
-            T instance = (T)type.newInstance();
+            //T instance = (T)type.newInstance();
+            T instance = aggregateRootType.newInstance();
             if (snapshot != null) {
                 ((AggregateMemento)instance).restoreFromSnapshot(snapshot);
             }
@@ -81,7 +86,7 @@ public class BaseRepository<T extends BaseAggregateRoot> implements Repository<T
         //TODO: 在此之前使用mailbox将对同一个聚合根的操作转为串行处理也可以
         synchronized (locker) {
             if (expectedVersion != -1) {
-                AggregateRoot item = getById(aggregateRoot.getId(), aggregateRoot.getClass());
+                T item = getById(aggregateRoot.getId(), aggregateRoot.getClass());
                 if (item.getVersion() != expectedVersion) {
                     throw new ConcurrencyException(String.format("id=%s, version=%d, expected=%d",
                             aggregateRoot.getId(), aggregateRoot.getVersion(), expectedVersion));

@@ -42,11 +42,11 @@ public class Note extends BaseAggregateRoot implements AggregateMemento {
         this.title = ss.getTitle();
     }
 
-    public void handle(NoteCreated e) {
+    private void handle(NoteCreated e) {
         this.title = e.getTitle();
     }
 
-    public void handle(NoteTitleChanged e) {
+    private void handle(NoteTitleChanged e) {
         this.title = e.getTitle();
     }
 
