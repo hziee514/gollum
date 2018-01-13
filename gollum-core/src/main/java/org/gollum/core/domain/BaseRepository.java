@@ -19,7 +19,7 @@ import java.util.List;
  * @author wurenhai
  * @date 2017/12/26
  */
-public class BaseRepository<T extends BaseAggregateRoot> implements Repository<T> {
+public abstract class BaseRepository<T extends BaseAggregateRoot> implements Repository<T> {
 
     private final EventStorage storage;
     private final EventBus publisher;

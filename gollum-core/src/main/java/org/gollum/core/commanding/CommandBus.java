@@ -14,14 +14,14 @@ public interface CommandBus {
      *
      * @param command
      */
-    default void sendSync(Command command) {
+    default Object sendSync(Command command) {
         Future<?> future = send(command);
         try {
-            future.get();
+            return future.get();
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            throw new CommandExecutionException(command, e);
         } catch (ExecutionException e) {
-            e.printStackTrace();
+            throw new CommandExecutionException(command, e);
         }
     }
 

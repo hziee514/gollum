@@ -1,6 +1,6 @@
 # gollum
 
-主要目用于更好的理解DDD+CQRS，以及思考如何更容易的让DDD落地
+主要用于更好的理解DDD+CQRS，以及思考如何更容易的让DDD落地
 
 ## gollum-common
 
