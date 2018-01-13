@@ -9,7 +9,7 @@ import org.gollum.core.eventing.AggregateSnapshot;
  * @author wurenhai
  * @date 2017/12/26
  */
-public interface AggregateMemento {
+public interface AggregateOriginator {
 
     /**
      * 生成最新快照

@@ -1,7 +1,7 @@
 package org.gollum.bank.domain.deposit;
 
 import org.gollum.bank.domain.TransactionStatus;
-import org.gollum.core.domain.AggregateMemento;
+import org.gollum.core.domain.AggregateOriginator;
 import org.gollum.core.domain.BaseAggregateRoot;
 import org.gollum.core.eventing.AggregateSnapshot;
 
@@ -11,7 +11,7 @@ import org.gollum.core.eventing.AggregateSnapshot;
  * @author wurenhai
  * @date 2018/1/4
  */
-public class DepositTransaction extends BaseAggregateRoot implements AggregateMemento {
+public class DepositTransaction extends BaseAggregateRoot implements AggregateOriginator {
 
     /**
      * 存款账户ID
@@ -28,7 +28,7 @@ public class DepositTransaction extends BaseAggregateRoot implements AggregateMe
      */
     private TransactionStatus status;
 
-    public DepositTransaction() {
+    private DepositTransaction() {
         //required, repository create instance with default constructor
     }
 

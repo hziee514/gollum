@@ -12,10 +12,9 @@ public interface Repository<T extends AggregateRoot> {
      * 根据ID获取聚合根实例
      *
      * @param aggregateRootId
-     * @param type
      * @return
      */
-    T getById(long aggregateRootId, Class<?> type);
+    T getById(long aggregateRootId);
 
     /**
      * 提交聚合根的变更

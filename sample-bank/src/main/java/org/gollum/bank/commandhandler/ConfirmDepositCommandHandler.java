@@ -22,7 +22,7 @@ public class ConfirmDepositCommandHandler implements CommandHandler<ConfirmDepos
 
     @Override
     public void exec(ConfirmDepositCommand command) {
-        DepositTransaction depositTransaction = repository.getById(command.getAggregateRootId(), DepositTransaction.class);
+        DepositTransaction depositTransaction = repository.getById(command.getAggregateRootId());
         Assertion.notNull(depositTransaction, "depositTransaction");
         int version = depositTransaction.getVersion();
         depositTransaction.confirmDeposit();

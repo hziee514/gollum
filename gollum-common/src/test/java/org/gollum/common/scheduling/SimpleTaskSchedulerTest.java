@@ -38,7 +38,7 @@ public class SimpleTaskSchedulerTest {
         scheduler.schedule(name2, task2, 10);
         Thread.sleep(10);
         scheduler.cancel(name1);
-        Thread.sleep(10);
+        Thread.sleep(20);
         verify(task1, times(0)).run();
         verify(task2, times(1)).run();
     }
@@ -58,7 +58,7 @@ public class SimpleTaskSchedulerTest {
         String name = "hello";
         Runnable task = mock(Runnable.class);
         Future<?> future = scheduler.schedule(name, task, 10);
-        Thread.sleep(20);
+        Thread.sleep(25);
         assertTrue(future.isDone());
         verify(task, times(1)).run();
         assertTrue(!scheduler.has(name));

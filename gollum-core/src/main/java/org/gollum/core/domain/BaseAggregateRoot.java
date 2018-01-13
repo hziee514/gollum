@@ -1,6 +1,6 @@
 package org.gollum.core.domain;
 
-import org.gollum.common.util.TextUtils;
+import org.gollum.common.util.Assertion;
 import org.gollum.core.eventing.DomainEvent;
 
 import java.lang.reflect.InvocationTargetException;
@@ -37,17 +37,13 @@ public abstract class BaseAggregateRoot implements AggregateRoot {
 
     protected BaseAggregateRoot(String id) {
         this();
-        if (TextUtils.isNullOrEmpty(id)) {
-            throw new NullPointerException("id");
-        }
+        Assertion.notNullOrEmpty(id, "id");
         this.id = id;
     }
 
     protected BaseAggregateRoot(String id, int version) {
         this(id);
-        if (version < 0) {
-            throw new IllegalArgumentException("Version can not negative");
-        }
+        Assertion.nonNegative(version, "version");
         this.version = version;
     }
 
@@ -102,11 +98,11 @@ public abstract class BaseAggregateRoot implements AggregateRoot {
             m.setAccessible(true);
             m.invoke(this, event);
         } catch (NoSuchMethodException e) {
-            throw new RuntimeException(e);
+            throw new NoEventHandleMethodException(getClass(), event.getClass(), e.getMessage());
         } catch (IllegalAccessException e) {
-            throw new RuntimeException(e);
+            throw new NoEventHandleMethodException(getClass(), event.getClass(), e.getMessage());
         } catch (InvocationTargetException e) {
-            throw new RuntimeException(e);
+            throw new NoEventHandleMethodException(getClass(), event.getClass(), e.getMessage());
         }
 
         if (isNew) {

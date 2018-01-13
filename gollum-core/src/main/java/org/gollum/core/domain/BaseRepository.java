@@ -1,10 +1,14 @@
 package org.gollum.core.domain;
 
+import org.gollum.common.exception.ConcurrencyException;
+import org.gollum.common.exception.NoDefaultConstructorException;
 import org.gollum.core.eventing.AggregateSnapshot;
 import org.gollum.core.eventing.DomainEvent;
 import org.gollum.core.eventing.EventBus;
 import org.gollum.core.eventing.EventStorage;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.ParameterizedType;
 import java.util.List;
 
@@ -29,12 +33,11 @@ public class BaseRepository<T extends BaseAggregateRoot> implements Repository<T
      * 根据ID与类型获取聚合根实例
      *
      * @param aggregateRootId
-     * @param type
      * @return
      */
     @SuppressWarnings("unchecked")
     @Override
-    public T getById(String aggregateRootId, Class<? extends BaseAggregateRoot> type) {
+    public T getById(String aggregateRootId) {
         List<DomainEvent> events;
         AggregateSnapshot snapshot = storage.readSnapshot(aggregateRootId);
         if (snapshot == null) {
@@ -51,19 +54,24 @@ public class BaseRepository<T extends BaseAggregateRoot> implements Repository<T
         Class<T> aggregateRootType = (Class<T>)((ParameterizedType)getClass().getGenericSuperclass()).getActualTypeArguments()[0];
 
         try {
-            //T instance = (T)type.newInstance();
-            T instance = aggregateRootType.newInstance();
+            Constructor<T> constructor = aggregateRootType.getDeclaredConstructor(new Class<?>[]{});
+            constructor.setAccessible(true);
+            T instance = constructor.newInstance();
             if (snapshot != null) {
-                ((AggregateMemento)instance).restoreFromSnapshot(snapshot);
+                ((AggregateOriginator)instance).restoreFromSnapshot(snapshot);
             }
             if (!events.isEmpty()) {
                 instance.replayEvents(events);
             }
             return instance;
         } catch (IllegalAccessException e) {
-            throw new RuntimeException(e);
+            throw new NoDefaultConstructorException(aggregateRootType.getName());
         } catch (InstantiationException e) {
-            throw new RuntimeException(e);
+            throw new NoDefaultConstructorException(aggregateRootType.getName());
+        } catch (NoSuchMethodException e) {
+            throw new NoDefaultConstructorException(aggregateRootType.getName());
+        } catch (InvocationTargetException e) {
+            throw new NoDefaultConstructorException(aggregateRootType.getName());
         }
     }
 
@@ -76,7 +84,7 @@ public class BaseRepository<T extends BaseAggregateRoot> implements Repository<T
      * @param expectedVersion 期望修订的版本号, -1表示是新建
      */
     @Override
-    public void commit(BaseAggregateRoot aggregateRoot, int expectedVersion) {
+    public void commit(T aggregateRoot, int expectedVersion) {
         List<DomainEvent> changes = aggregateRoot.getChanges();
         if (changes.isEmpty()) {
             return;
@@ -86,15 +94,15 @@ public class BaseRepository<T extends BaseAggregateRoot> implements Repository<T
         //TODO: 在此之前使用mailbox将对同一个聚合根的操作转为串行处理也可以
         synchronized (locker) {
             if (expectedVersion != -1) {
-                T item = getById(aggregateRoot.getId(), aggregateRoot.getClass());
+                T item = getById(aggregateRoot.getId());
                 if (item.getVersion() != expectedVersion) {
-                    throw new ConcurrencyException(String.format("id=%s, version=%d, expected=%d",
-                            aggregateRoot.getId(), aggregateRoot.getVersion(), expectedVersion));
+                    throw new ConcurrencyException("id=%s, version=%d, expected=%d",
+                            aggregateRoot.getId(), aggregateRoot.getVersion(), expectedVersion);
                 }
             }
 
             //存储领域事件和聚合根快照
-            AggregateSnapshot snapshot = ((AggregateMemento) aggregateRoot).takeSnapshot();
+            AggregateSnapshot snapshot = ((AggregateOriginator) aggregateRoot).takeSnapshot();
             storage.save(changes, snapshot);
 
             aggregateRoot.acceptChanges();

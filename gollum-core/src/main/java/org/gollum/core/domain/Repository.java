@@ -10,10 +10,9 @@ public interface Repository<T extends BaseAggregateRoot> {
      * 根据ID获取获取聚合根实例
      *
      * @param aggregateRootId
-     * @param type
      * @return
      */
-    T getById(String aggregateRootId, Class<? extends BaseAggregateRoot> type);
+    T getById(String aggregateRootId);
 
     /**
      * 提交聚合根的变更
@@ -21,6 +20,6 @@ public interface Repository<T extends BaseAggregateRoot> {
      * @param aggregateRoot
      * @param expectedVersion
      */
-    void commit(BaseAggregateRoot aggregateRoot, int expectedVersion);
+    void commit(T aggregateRoot, int expectedVersion);
 
 }

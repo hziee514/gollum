@@ -21,7 +21,7 @@ public class ChangeNoteTitleCommandHandler implements CommandHandler<ChangeNoteT
 
     @Override
     public void exec(ChangeNoteTitleCommand command) {
-        Note note = repository.getById(command.getAggregateRootId(), Note.class);
+        Note note = repository.getById(command.getAggregateRootId());
         int version = note.getVersion();
         note.changeTitle(command.getTitle());
         repository.commit(note, version);

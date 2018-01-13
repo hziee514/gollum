@@ -22,7 +22,7 @@ public class AddTransactionPreparationCommandHandler implements CommandHandler<A
 
     @Override
     public void exec(AddTransactionPreparationCommand command) {
-        BankAccount bankAccount = repository.getById(command.getAggregateRootId(), BankAccount.class);
+        BankAccount bankAccount = repository.getById(command.getAggregateRootId());
         Assertion.notNull(bankAccount, "BankAccount[%s]", command.getAggregateRootId());
         int version = bankAccount.getVersion();
         bankAccount.addTransactionPreparation(command.getTransactionId(),

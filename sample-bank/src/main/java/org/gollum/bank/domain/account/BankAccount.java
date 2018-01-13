@@ -2,7 +2,7 @@ package org.gollum.bank.domain.account;
 
 import org.gollum.bank.domain.PreparationType;
 import org.gollum.bank.domain.TransactionType;
-import org.gollum.core.domain.AggregateMemento;
+import org.gollum.core.domain.AggregateOriginator;
 import org.gollum.core.domain.BaseAggregateRoot;
 import org.gollum.core.eventing.AggregateSnapshot;
 
@@ -15,7 +15,7 @@ import java.util.Map;
  * @author wurenhai
  * @date 2018/1/4
  */
-public class BankAccount extends BaseAggregateRoot implements AggregateMemento {
+public class BankAccount extends BaseAggregateRoot implements AggregateOriginator {
 
     private String owner;
 
@@ -29,7 +29,7 @@ public class BankAccount extends BaseAggregateRoot implements AggregateMemento {
      */
     private Map<String, TransactionPreparation> transactionPreparations;
 
-    public BankAccount() {
+    private BankAccount() {
         //required, repository create instance with default constructor
     }
 

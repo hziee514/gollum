@@ -1,6 +1,6 @@
 package org.gollum.core.commanding;
 
-import java.util.UUID;
+import org.gollum.common.util.ObjectGuid;
 
 /**
  * 业务命令抽象类
@@ -31,7 +31,7 @@ public abstract class BaseCommand implements Command {
     }
 
     public BaseCommand(String aggregateRootId, int version) {
-        this.id = UUID.randomUUID().toString();
+        this.id = new ObjectGuid().newId();
         this.aggregateRootId = aggregateRootId;
         this.version = version;
     }

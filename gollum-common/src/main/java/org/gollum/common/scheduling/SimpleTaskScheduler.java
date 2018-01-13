@@ -50,7 +50,6 @@ public class SimpleTaskScheduler implements TinyScheduler {
     }
 
     private void done(String name) {
-        Assertion.notNullOrEmpty(name, "name");
         tasks.remove(name);
     }
 
