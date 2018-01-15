@@ -1,12 +1,10 @@
 package org.gollum.simple.domain;
 
 import org.gollum.common.exception.NoDefaultConstructorException;
+import org.gollum.common.util.Assertion;
+import org.gollum.common.util.ReflectionUtils;
 import org.gollum.simple.storage.AggregateSnapshot;
 import org.gollum.simple.storage.SnapshotStorage;
-
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.ParameterizedType;
 
 /**
  * 抽象仓储类型，提供基础的仓储服务
@@ -45,20 +43,13 @@ public abstract class BaseRepository<T extends BaseAggregateRoot> implements Rep
             return null;
         }
 
-        Class<T> aggregateRootType = (Class<T>)((ParameterizedType)getClass().getGenericSuperclass()).getActualTypeArguments()[0];
+        Class<T> aggregateRootType = ReflectionUtils.getActualType(getClass());
+        Assertion.notNull(aggregateRootType, "AggregateRootType");
         try {
-            Constructor<T> constructor = aggregateRootType.getDeclaredConstructor(new Class<?>[]{});
-            constructor.setAccessible(true);
-            T instance = constructor.newInstance();
+            T instance = ReflectionUtils.newInstance(aggregateRootType);
             instance.restoreFromSnapshot(snapshot);
             return instance;
-        } catch (IllegalAccessException e) {
-            throw new NoDefaultConstructorException(aggregateRootType.getName());
-        } catch (InstantiationException e) {
-            throw new NoDefaultConstructorException(aggregateRootType.getName());
-        } catch (NoSuchMethodException e) {
-            throw new NoDefaultConstructorException(aggregateRootType.getName());
-        } catch (InvocationTargetException e) {
+        } catch (ReflectiveOperationException e) {
             throw new NoDefaultConstructorException(aggregateRootType.getName());
         }
     }
@@ -69,6 +60,7 @@ public abstract class BaseRepository<T extends BaseAggregateRoot> implements Rep
      * @param aggregateRoot 聚合根实例
      * @param expectedVersion 期望版本号
      */
+    @SuppressWarnings("unchecked")
     @Override
     public void commit(T aggregateRoot, int expectedVersion) {
         storage.saveSnapshot(aggregateRoot.takeSnapshot());

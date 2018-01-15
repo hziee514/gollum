@@ -2,14 +2,13 @@ package org.gollum.core.domain;
 
 import org.gollum.common.exception.ConcurrencyException;
 import org.gollum.common.exception.NoDefaultConstructorException;
+import org.gollum.common.util.Assertion;
+import org.gollum.common.util.ReflectionUtils;
 import org.gollum.core.eventing.AggregateSnapshot;
 import org.gollum.core.eventing.DomainEvent;
 import org.gollum.core.eventing.EventBus;
 import org.gollum.core.eventing.EventStorage;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.ParameterizedType;
 import java.util.List;
 
 /**
@@ -51,12 +50,10 @@ public abstract class BaseRepository<T extends BaseAggregateRoot> implements Rep
             return null;
         }
 
-        Class<T> aggregateRootType = (Class<T>)((ParameterizedType)getClass().getGenericSuperclass()).getActualTypeArguments()[0];
-
+        Class<T> aggregateRootType = ReflectionUtils.getActualType(getClass());
+        Assertion.notNull(aggregateRootType, "AggregateRootType");
         try {
-            Constructor<T> constructor = aggregateRootType.getDeclaredConstructor(new Class<?>[]{});
-            constructor.setAccessible(true);
-            T instance = constructor.newInstance();
+            T instance = ReflectionUtils.newInstance(aggregateRootType);
             if (snapshot != null) {
                 ((AggregateOriginator)instance).restoreFromSnapshot(snapshot);
             }
@@ -64,13 +61,7 @@ public abstract class BaseRepository<T extends BaseAggregateRoot> implements Rep
                 instance.replayEvents(events);
             }
             return instance;
-        } catch (IllegalAccessException e) {
-            throw new NoDefaultConstructorException(aggregateRootType.getName());
-        } catch (InstantiationException e) {
-            throw new NoDefaultConstructorException(aggregateRootType.getName());
-        } catch (NoSuchMethodException e) {
-            throw new NoDefaultConstructorException(aggregateRootType.getName());
-        } catch (InvocationTargetException e) {
+        } catch (ReflectiveOperationException e) {
             throw new NoDefaultConstructorException(aggregateRootType.getName());
         }
     }
