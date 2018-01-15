@@ -8,6 +8,9 @@ import org.gollum.bank.domain.account.TransactionPreparationCommitted;
 import org.gollum.bank.domain.deposit.DepositTransactionCompleted;
 import org.gollum.bank.domain.deposit.DepositTransactionPreparationCompleted;
 import org.gollum.bank.domain.deposit.DepositTransactionStarted;
+import org.gollum.bank.domain.transfer.TransferTransaction;
+import org.gollum.bank.domain.transfer.TransferTransactionInfo;
+import org.gollum.bank.domain.transfer.TransferTransactionStarted;
 import org.gollum.core.eventing.DomainEvent;
 import org.gollum.core.eventing.EventHandler;
 import org.slf4j.Logger;
@@ -108,4 +111,17 @@ public abstract class LogHandler<T extends DomainEvent> implements EventHandler<
                     preparation.getTransactionType(), preparation.getPreparationType(), preparation.getAmount());
         }
     }
+
+    @Component
+    @Singleton
+    public static class TransferTransactionStartedLogHandler extends LogHandler<TransferTransactionStarted> {
+        @Override
+        public void handle(TransferTransactionStarted e) {
+            TransferTransactionInfo transactionInfo = e.getTransactionInfo();
+            LOG.info("id={}, version={}, transactionInfo(source={}, target={}, amount={})",
+                    e.getAggregateRootId(), e.getVersion(),
+                    transactionInfo.getSourceAccountId(), transactionInfo.getTargetAccountId(), transactionInfo.getAmount());
+        }
+    }
+
 }

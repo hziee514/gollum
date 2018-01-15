@@ -37,8 +37,10 @@ public class SimpleCommandBus implements CommandBus, CommandConsumer {
         return executor.submit(() -> {
             try {
                 consume(command);
+                return true;
             } catch (GollumException e) {
                 LOG.error(e.getMessage(), e);
+                return false;
             }
         });
     }

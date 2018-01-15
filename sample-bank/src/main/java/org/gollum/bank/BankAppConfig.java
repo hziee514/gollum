@@ -8,11 +8,13 @@ import org.gollum.bank.domain.account.TransactionPreparationCommitted;
 import org.gollum.bank.domain.deposit.DepositTransactionCompleted;
 import org.gollum.bank.domain.deposit.DepositTransactionPreparationCompleted;
 import org.gollum.bank.domain.deposit.DepositTransactionStarted;
+import org.gollum.bank.domain.transfer.TransferTransactionStarted;
 import org.gollum.bank.eventhandler.LogHandler;
 import org.gollum.bank.saga.deposit.DepositTransactionPreparationCompletedSagaHandler;
 import org.gollum.bank.saga.deposit.DepositTransactionStartedSagaHandler;
 import org.gollum.bank.saga.deposit.TransactionPreparationAddedSagaHandler;
 import org.gollum.bank.saga.deposit.TransactionPreparationCommittedSagaHandler;
+import org.gollum.bank.saga.transfer.TransferTransactionStartedSagaHandler;
 import org.gollum.common.scheduling.SimpleTaskScheduler;
 import org.gollum.common.scheduling.TinyScheduler;
 import org.gollum.core.commanding.CommandBus;
@@ -46,6 +48,9 @@ public class BankAppConfig {
         bus.register(ConfirmDepositPreparationCommand.class, ctx.getBean(ConfirmDepositPreparationCommandHandler.class));
         bus.register(CommitTransactionPreparationCommand.class, ctx.getBean(CommitTransactionPreparationCommandHandler.class));
         bus.register(ConfirmDepositCommand.class, ctx.getBean(ConfirmDepositCommandHandler.class));
+
+        bus.register(StartTransferTransactionCommand.class, ctx.getBean(StartTransferTransactionCommandHandler.class));
+
         return bus;
     }
 
@@ -74,6 +79,9 @@ public class BankAppConfig {
         bus.register(TransactionPreparationCommitted.class, ctx.getBean(TransactionPreparationCommittedSagaHandler.class));
 
         bus.register(DepositTransactionCompleted.class, ctx.getBean(LogHandler.DepositTransactionCompletedLogHandler.class));
+
+        bus.register(TransferTransactionStarted.class, ctx.getBean(LogHandler.TransferTransactionStartedLogHandler.class));
+        bus.register(TransferTransactionStarted.class, ctx.getBean(TransferTransactionStartedSagaHandler.class));
 
         return bus;
     }

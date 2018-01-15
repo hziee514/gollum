@@ -22,4 +22,8 @@ public interface Repository<T extends BaseAggregateRoot> {
      */
     void commit(T aggregateRoot, int expectedVersion);
 
+    default void commit(T aggregateRoot) {
+        commit(aggregateRoot, -1);
+    }
+
 }

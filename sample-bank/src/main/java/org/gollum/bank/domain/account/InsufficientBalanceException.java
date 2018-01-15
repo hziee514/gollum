@@ -1,12 +1,13 @@
 package org.gollum.bank.domain.account;
 
 import org.gollum.bank.domain.TransactionType;
+import org.gollum.common.exception.GollumException;
 
 /**
  * @author wurenhai
  * @date 2018/1/4
  */
-public class InsufficientBalanceException extends RuntimeException {
+public class InsufficientBalanceException extends GollumException {
 
     private String accountId;
 

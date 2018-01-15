@@ -2,6 +2,8 @@ package org.gollum.bank;
 
 import org.gollum.bank.command.CreateAccountCommand;
 import org.gollum.bank.command.StartDepositTransactionCommand;
+import org.gollum.bank.command.StartTransferTransactionCommand;
+import org.gollum.bank.domain.transfer.TransferTransactionInfo;
 import org.gollum.common.util.ObjectId;
 import org.gollum.common.util.SnowflakeId;
 import org.gollum.core.commanding.CommandBus;
@@ -39,6 +41,9 @@ public class BankApp {
 
         Thread.sleep(100);
         bus.send(new StartDepositTransactionCommand(idGen.newStringId("DT"), account3, 1000));
+
+        Thread.sleep(100);
+        bus.send(new StartTransferTransactionCommand(idGen.newStringId("TT"), new TransferTransactionInfo(account1, account3, 1000)));
 
         System.out.println();
     }

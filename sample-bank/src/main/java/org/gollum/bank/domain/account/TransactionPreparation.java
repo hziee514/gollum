@@ -11,14 +11,29 @@ import java.io.Serializable;
  */
 public class TransactionPreparation implements Serializable {
 
+    /**
+     * 账户ID
+     */
     private String accountId;
 
+    /**
+     * 交易ID
+     */
     private String transactionId;
 
+    /**
+     * 交易类型
+     */
     private TransactionType transactionType;
 
+    /**
+     * 预借或预贷
+     */
     private PreparationType preparationType;
 
+    /**
+     * 交易金额
+     */
     private int amount;
 
     public TransactionPreparation(String accountId,
@@ -52,4 +67,5 @@ public class TransactionPreparation implements Serializable {
     public int getAmount() {
         return amount;
     }
+
 }
