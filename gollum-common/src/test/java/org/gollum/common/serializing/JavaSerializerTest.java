@@ -34,8 +34,44 @@ public class JavaSerializerTest {
         FieldObject o;
     }
 
+    public static class TestMessage<T> implements Serializable {
+        private static final long serialVersionUID = 1643165036864584531L;
+        String id;
+        T payload;
+        TestMessage(String id, T payload) {
+            this.id = id;
+            this.payload = payload;
+        }
+
+        String getId() {
+            return id;
+        }
+
+        T getPayload() {
+            return payload;
+        }
+    }
+
     @Test
-    public void serialize_deserialize_pass() throws Exception {
+    public void serialize_deserialize_general() {
+        ObjectSerializer serializer = new JavaSerializer();
+        FieldObject fo = new FieldObject();
+        fo.a = "中文";
+        TestMessage<FieldObject> tm = new TestMessage<>("123", fo);
+        byte[] data = serializer.serialize(tm);
+        assertNotNull(data);
+        Object so = serializer.deserialize(data);
+        assertNotNull(so);
+        assertTrue(so instanceof TestMessage);
+        TestMessage<?> oo = (TestMessage<?>)so;
+        assertEquals(oo.getId(), "123");
+        System.out.println(oo.getPayload().getClass().getName());
+        assertTrue(oo.getPayload() instanceof FieldObject);
+        assertEquals(oo.getPayload(), fo);
+    }
+
+    @Test
+    public void serialize_deserialize_pass() {
         ObjectSerializer serializer = new JavaSerializer();
         FieldObject fo = new FieldObject();
         fo.a = "中文";

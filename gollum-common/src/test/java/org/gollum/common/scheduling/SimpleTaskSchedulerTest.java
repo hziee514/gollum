@@ -57,7 +57,7 @@ public class SimpleTaskSchedulerTest {
         SimpleTaskScheduler scheduler = new SimpleTaskScheduler();
         String name = "hello";
         Runnable task = mock(Runnable.class);
-        Future<?> future = scheduler.schedule(name, task, 10);
+        Future<?> future = scheduler.schedule(name, task, 5);
         Thread.sleep(25);
         assertTrue(future.isDone());
         verify(task, times(1)).run();
