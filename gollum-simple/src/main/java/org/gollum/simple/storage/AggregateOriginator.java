@@ -7,20 +7,20 @@ package org.gollum.simple.storage;
  * @author wurenhai
  * @date 2018/1/10
  */
-public interface AggregateOriginator {
+public interface AggregateOriginator<T> {
 
     /**
      * 生成聚合根最新快照
      *
      * @return
      */
-    AggregateSnapshot takeSnapshot();
+    T takeSnapshot();
 
     /**
      * 从快照中恢复聚合根状态
      *
      * @param snapshot
      */
-    void restoreFromSnapshot(AggregateSnapshot snapshot);
+    void restoreFromSnapshot(T snapshot);
 
 }

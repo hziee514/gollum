@@ -4,6 +4,7 @@ import org.gollum.common.exception.NoDefaultConstructorException;
 import org.gollum.common.util.Assertion;
 import org.gollum.common.util.ReflectionUtils;
 import org.gollum.simple.storage.AggregateSnapshot;
+import org.gollum.simple.storage.BaseAggregateSnapshot;
 import org.gollum.simple.storage.SnapshotStorage;
 
 /**
@@ -12,16 +13,16 @@ import org.gollum.simple.storage.SnapshotStorage;
  * @author wurenhai
  * @date 2018/1/10
  */
-public abstract class BaseRepository<T extends BaseAggregateRoot> implements Repository<T> {
+public abstract class BaseRepository<S extends AggregateSnapshot, T extends BaseAggregateRoot<S>> implements Repository<T> {
 
-    private SnapshotStorage storage;
+    private SnapshotStorage<S> storage;
 
     /**
      * 注入存储实现(有些框架不能从构造函数注入)
      *
      * @param storage
      */
-    protected void injectStorage(SnapshotStorage storage) {
+    protected void injectStorage(SnapshotStorage<S> storage) {
         this.storage = storage;
     }
 
@@ -38,12 +39,12 @@ public abstract class BaseRepository<T extends BaseAggregateRoot> implements Rep
     @SuppressWarnings("unchecked")
     @Override
     public T getById(long aggregateRootId) {
-        AggregateSnapshot snapshot = storage.readSnapshot(aggregateRootId);
+        S snapshot = storage.readSnapshot(aggregateRootId);
         if (snapshot == null) {
             return null;
         }
 
-        Class<T> aggregateRootType = ReflectionUtils.getActualType(getClass());
+        Class<T> aggregateRootType = ReflectionUtils.getActualType(getClass(), 1);
         Assertion.notNull(aggregateRootType, "AggregateRootType");
         try {
             T instance = ReflectionUtils.newInstance(aggregateRootType);

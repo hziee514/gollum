@@ -12,6 +12,7 @@
     <module>gollum-simple</module>
     <module>sample-note</module>
     <module>sample-bank</module>
+    <module>simple-note</module>
   </modules>
   <packaging>pom</packaging>
 
