@@ -22,6 +22,10 @@
 
 基于gollum-core和spring的一个银行转账demo
 
+## simple-note
+
+基于gollum-simple和spring的记事本demo
+
 ## 学习参考资料
 
 https://www.codeproject.com/Articles/555855/Introduction-to-CQRS
