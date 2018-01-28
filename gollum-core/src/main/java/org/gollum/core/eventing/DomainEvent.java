@@ -1,5 +1,6 @@
 package org.gollum.core.eventing;
 
+import java.io.Serializable;
 import java.util.UUID;
 
 /**
@@ -10,7 +11,9 @@ import java.util.UUID;
  * @author wurenhai
  * @date 2017/12/26
  */
-public abstract class DomainEvent {
+public abstract class DomainEvent implements Serializable {
+
+    private static final long serialVersionUID = -3687853118000846402L;
 
     /**
      * 事件ID

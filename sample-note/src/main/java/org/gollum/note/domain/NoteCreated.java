@@ -8,6 +8,8 @@ import org.gollum.core.eventing.DomainEvent;
  */
 public class NoteCreated extends DomainEvent {
 
+    private static final long serialVersionUID = 6620296583520070067L;
+
     private String title;
 
     public NoteCreated(String title) {
