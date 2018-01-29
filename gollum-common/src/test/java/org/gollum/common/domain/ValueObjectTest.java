@@ -17,10 +17,6 @@ public class ValueObjectTest {
         public AObject(int a) {
             this.a = a;
         }
-
-        protected Object[] getAttributes() {
-            return new Object[] { a };
-        }
     }
 
     static class BObject extends ValueObject {
@@ -29,10 +25,6 @@ public class ValueObjectTest {
 
         public BObject(String b) {
             this.b = b;
-        }
-
-        protected Object[] getAttributes() {
-            return new Object[] { b };
         }
     }
 
@@ -45,10 +37,6 @@ public class ValueObjectTest {
         public CObject(AObject obj, long c) {
             this.obj = obj;
             this.c = c;
-        }
-
-        protected Object[] getAttributes() {
-            return new Object[] { obj, c };
         }
     }
 

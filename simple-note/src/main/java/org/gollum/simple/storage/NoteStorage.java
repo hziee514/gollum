@@ -10,13 +10,13 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @Singleton
-public class NoteStorage implements SnapshotStorage<NoteSnapshot> {
+public class NoteStorage implements LongSnapshotStorage<NoteSnapshot> {
 
     @Autowired
     private NoteDao dao;
 
     @Override
-    public NoteSnapshot readSnapshot(long aggregateRootId) {
+    public NoteSnapshot readSnapshot(Long aggregateRootId) {
         NoteBean bean = dao.findOne(aggregateRootId);
         if (bean == null) {
             return null;

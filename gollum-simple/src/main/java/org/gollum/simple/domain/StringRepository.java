@@ -3,9 +3,10 @@ package org.gollum.simple.domain;
 import org.gollum.common.exception.NoDefaultConstructorException;
 import org.gollum.common.util.Assertion;
 import org.gollum.common.util.ReflectionUtils;
-import org.gollum.simple.storage.AggregateSnapshot;
-import org.gollum.simple.storage.BaseAggregateSnapshot;
-import org.gollum.simple.storage.SnapshotStorage;
+import org.gollum.simple.storage.LongAggregateSnapshot;
+import org.gollum.simple.storage.LongSnapshotStorage;
+import org.gollum.simple.storage.StringAggregateSnapshot;
+import org.gollum.simple.storage.StringSnapshotStorage;
 
 /**
  * 抽象仓储类型，提供基础的仓储服务
@@ -13,20 +14,20 @@ import org.gollum.simple.storage.SnapshotStorage;
  * @author wurenhai
  * @date 2018/1/10
  */
-public abstract class BaseRepository<S extends AggregateSnapshot, T extends BaseAggregateRoot<S>> implements Repository<T> {
+public abstract class StringRepository<S extends StringAggregateSnapshot, T extends StringAggregateRoot<S>> implements Repository<T, String> {
 
-    private SnapshotStorage<S> storage;
+    private StringSnapshotStorage<S> storage;
 
     /**
      * 注入存储实现(有些框架不能从构造函数注入)
      *
      * @param storage
      */
-    protected void injectStorage(SnapshotStorage<S> storage) {
+    protected void injectStorage(StringSnapshotStorage<S> storage) {
         this.storage = storage;
     }
 
-    /*public BaseRepository(SnapshotStorage storage) {
+    /*public LongRepository(SnapshotStorage storage) {
         this.storage = storage;
     }*/
 
@@ -38,7 +39,7 @@ public abstract class BaseRepository<S extends AggregateSnapshot, T extends Base
      */
     @SuppressWarnings("unchecked")
     @Override
-    public T getById(long aggregateRootId) {
+    public T getById(String aggregateRootId) {
         S snapshot = storage.readSnapshot(aggregateRootId);
         if (snapshot == null) {
             return null;

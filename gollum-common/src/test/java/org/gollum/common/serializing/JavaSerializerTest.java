@@ -18,11 +18,6 @@ public class JavaSerializerTest {
 
         String a;
         Integer i;
-
-        @Override
-        protected Object[] getAttributes() {
-            return new Object[] {a, i};
-        }
     }
 
     public static class TestObject implements Serializable {

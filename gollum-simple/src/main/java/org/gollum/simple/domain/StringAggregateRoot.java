@@ -7,24 +7,26 @@ import org.gollum.simple.storage.AggregateSnapshot;
 /**
  * 聚合根抽象类, 所有聚合根都必须从这里继承
  *
+ * @param <S>
+ *
  * @author wurenhai
  * @date 2018/1/10
  */
-public abstract class BaseAggregateRoot<T extends AggregateSnapshot> implements AggregateRoot, AggregateOriginator<T> {
+public abstract class StringAggregateRoot<S extends AggregateSnapshot> implements AggregateRoot<String>, AggregateOriginator<S> {
 
-    protected long id;
+    protected String id;
 
-    protected BaseAggregateRoot() {
+    protected StringAggregateRoot() {
 
     }
 
-    protected BaseAggregateRoot(long id) {
-        Assertion.positive(id, "id");
+    protected StringAggregateRoot(String id) {
+        Assertion.notNullOrEmpty(id, "id");
         this.id = id;
     }
 
     @Override
-    public long getId() {
+    public String getId() {
         return id;
     }
 

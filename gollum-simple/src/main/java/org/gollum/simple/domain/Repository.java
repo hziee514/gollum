@@ -3,10 +3,13 @@ package org.gollum.simple.domain;
 /**
  * 聚合根仓储
  *
+ * @param <T>
+ * @param <K>
+ *
  * @author wurenhai
  * @date 2018/1/10
  */
-public interface Repository<T extends AggregateRoot> {
+public interface Repository<T extends AggregateRoot<K>, K> {
 
     /**
      * 根据ID获取聚合根实例
@@ -14,7 +17,7 @@ public interface Repository<T extends AggregateRoot> {
      * @param aggregateRootId
      * @return
      */
-    T getById(long aggregateRootId);
+    T getById(K aggregateRootId);
 
     /**
      * 提交聚合根的变更

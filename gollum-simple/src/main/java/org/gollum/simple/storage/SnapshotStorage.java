@@ -6,7 +6,7 @@ package org.gollum.simple.storage;
  * @author wurenhai
  * @date 2018/1/10
  */
-public interface SnapshotStorage<T extends AggregateSnapshot> {
+public interface SnapshotStorage<K, T extends AggregateSnapshot<K>> {
 
     /**
      * 读取快照
@@ -14,7 +14,7 @@ public interface SnapshotStorage<T extends AggregateSnapshot> {
      * @param aggregateRootId
      * @return
      */
-    T readSnapshot(long aggregateRootId);
+    T readSnapshot(K aggregateRootId);
 
     /**
      * 保存快照

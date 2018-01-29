@@ -1,14 +1,14 @@
 package org.gollum.simple.note;
 
 import org.gollum.common.util.Assertion;
-import org.gollum.simple.domain.BaseAggregateRoot;
+import org.gollum.simple.domain.LongAggregateRoot;
 import org.gollum.simple.storage.NoteSnapshot;
 
 /**
  * @author wurenhai
  * @date 2018/1/23
  */
-public class Note extends BaseAggregateRoot<NoteSnapshot> {
+public class Note extends LongAggregateRoot<NoteSnapshot> {
 
     private String title;
 
