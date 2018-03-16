@@ -48,16 +48,16 @@ public class NoteAppConfig {
         return new InMemoryEventStorage();
     }
 
-    /*@Bean
+    @Bean
     @Singleton
     EventBus eventBus(ApplicationContext context) {
         SimpleEventBus bus = new SimpleEventBus();
         bus.register(NoteCreated.class, context.getBean(NoteCreatedHandler.class));
         bus.register(NoteTitleChanged.class, context.getBean(NoteTitleChangedHandler.class));
         return bus;
-    }*/
+    }
 
-    @Bean
+    /*@Bean
     @Singleton
     EventBus eventBus(ApplicationContext ctx) throws Exception {
         RMQEventBus bus = new RMQEventBus(ctx.getBean(ObjectSerializer.class));
@@ -73,7 +73,7 @@ public class NoteAppConfig {
         consumer.register(NoteCreated.class, ctx.getBean(NoteCreatedHandler.class));
         consumer.register(NoteTitleChanged.class, ctx.getBean(NoteTitleChangedHandler.class));
         return consumer;
-    }
+    }*/
 
     @Bean
     @Singleton

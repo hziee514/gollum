@@ -10,7 +10,7 @@ public class JavaSerializer implements ObjectSerializer {
 
     @Override
     public byte[] serialize(Object obj) {
-        try(ByteArrayOutputStream bos = new ByteArrayOutputStream(512);
+        try(ByteArrayOutputStream bos = new ByteArrayOutputStream(1024);
             ObjectOutputStream oos = new ObjectOutputStream(bos)) {
             oos.writeObject(obj);
             oos.flush();

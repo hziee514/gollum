@@ -3,7 +3,6 @@ package org.gollum.core.domain;
 import org.gollum.common.util.Assertion;
 import org.gollum.core.eventing.DomainEvent;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.LinkedList;
 import java.util.List;
@@ -97,13 +96,19 @@ public abstract class BaseAggregateRoot implements AggregateRoot {
             Method m = getClass().getDeclaredMethod("handle", event.getClass());
             m.setAccessible(true);
             m.invoke(this, event);
-        } catch (NoSuchMethodException e) {
-            throw new NoEventHandleMethodException(getClass(), event.getClass(), e.getMessage());
-        } catch (IllegalAccessException e) {
-            throw new NoEventHandleMethodException(getClass(), event.getClass(), e.getMessage());
-        } catch (InvocationTargetException e) {
+        } catch (ReflectiveOperationException e) {
             throw new NoEventHandleMethodException(getClass(), event.getClass(), e.getMessage());
         }
+
+        //这一段代码的性能反而更差
+        /*try {
+            MethodType mt = MethodType.methodType(void.class, event.getClass());
+            MethodHandle handle = lookup().findVirtual(getClass(), "handle", mt);
+            //handle.invokeExact(event);
+            handle.invoke(this, event);
+        } catch (Throwable e) {
+            throw new NoEventHandleMethodException(getClass(), event.getClass(), e.getMessage());
+        }*/
 
         if (isNew) {
             this.version++;

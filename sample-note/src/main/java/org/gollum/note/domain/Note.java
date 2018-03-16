@@ -44,10 +44,12 @@ public class Note extends BaseAggregateRoot implements AggregateOriginator {
 
     private void handle(NoteCreated e) {
         this.title = e.getTitle();
+        System.out.println("NoteCreated: " + e.getTitle());
     }
 
     private void handle(NoteTitleChanged e) {
         this.title = e.getTitle();
+        System.out.println("NoteTitleChanged: " + e.getTitle());
     }
 
 }
